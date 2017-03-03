@@ -1,0 +1,11 @@
+[
+	
+		{
+		  "title"      : "Posting Example",
+		  "category"   : "",
+		  "url"        : "http://localhost:4000/research/example/example_post",
+		  "date"       : "2016-12-31 00:00:00 +0900",
+		  "shortdate"  : "December 31, 2016"
+		} 
+	
+]

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+
+
+
+<title type="text">CyKor</title>
+<generator uri="https://github.com/mojombo/jekyll">Jekyll</generator>
+<link rel="self" type="application/atom+xml" href="http://localhost:4000/feed.xml" />
+<link rel="alternate" type="text/html" href="http://localhost:4000/" />
+<updated>2017-03-04T00:30:29+09:00</updated>
+<id>http://localhost:4000/</id>
+<author>
+  <name>CyKor</name>
+  <uri>http://localhost:4000/</uri>
+  <email>korea.cykor@gmail.com</email>
+</author>
+
+
+<entry>
+  <title type="html"><![CDATA[Posting Example]]></title>
+  <link rel="alternate" type="text/html" href="http://localhost:4000/research/example/example_post"/>
+  <id>http://localhost:4000/research/example/example_post</id>
+  <published>2016-12-31T00:00:00+09:00</published>
+  <updated>2016-12-31T00:00:00-00:00</updated>
+  
+  <author>
+    <name>CyKor</name>
+    <uri>http://localhost:4000</uri>
+    <email>korea.cykor@gmail.com</email>
+  </author>
+  
+  <content type="html">
+  
+    &lt;p&gt;A couple weeks ago, Microsoft released the &lt;a href=&quot;https://technet.microsoft.com/en-us/library/security/ms16-063.aspx&quot; target=&quot;_blank&quot;&gt;MS16-063&lt;/a&gt; security bulletin for their monthly Patch Tuesday (June 2016) security updates. It addressed vulnerabilities that affected Internet Explorer. Among other things, the patch fixes a memory corruption vulnerability in &lt;code class=&quot;highlighter-rouge&quot;&gt;jscript9.dll&lt;/code&gt; related to &lt;em&gt;TypedArray&lt;/em&gt; and &lt;em&gt;DataView&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Second paragraph&lt;/p&gt;
+
+&lt;h3 id=&quot;theme&quot;&gt;Theme&lt;/h3&gt;
+
+&lt;p&gt;We begin with comparing the May and June versions of &lt;code class=&quot;highlighter-rouge&quot;&gt;jscript9.dll&lt;/code&gt; in BinDiff:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/images/2016-12-31/bindiff_diff.png&quot; style=&quot;display: block; margin: auto;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;In pseudo-code, it looks like the following:&lt;/p&gt;
+
+&lt;div class=&quot;language-cpp highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;table style=&quot;border-spacing: 0&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;gutter gl&quot; style=&quot;text-align: right&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kr&quot;&gt;inline&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Var&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;DirectGetItem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;uint32&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GetLength&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;TypeName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;typedBuffer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TypeName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;buffer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;JavascriptNumber&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ToVar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;typedBuffer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GetScriptContext&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GetLibrary&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GetUndefined&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+
+  
+  &lt;p&gt;&lt;a href=&quot;http://localhost:4000/research/example/example_post&quot;&gt;Posting Example&lt;/a&gt; was originally published by CyKor at &lt;a href=&quot;http://localhost:4000&quot;&gt;CyKor&lt;/a&gt; on December 31, 2016.&lt;/p&gt;</content>
+</entry>
+
+</feed>
