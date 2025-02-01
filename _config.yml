@@ -1,7 +1,7 @@
 # Site settings
 title: Your site
 description: >
-    Your description
+    <img src='/assets/logo.png' style='max-width: 10%'>  CyKor, Korea University Hacking Club
 author: Your name
 email: your@e.mail
 baseurl: "" # the subpath of your site, e.g. /blog
