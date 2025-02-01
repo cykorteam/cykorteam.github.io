@@ -2,10 +2,10 @@
 title: Your site
 description: >
     <img src='/assets/logo.png' style='max-width: 10%'>  CyKor, Korea University Hacking Club
-author: Your name
-email: your@e.mail
+author: CyKor
+email: korea.cykor@gmail.com
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://yourname.github.io" # the base hostname & protocol for your site
+url: "https://blog.cykor.kr/" # the base hostname & protocol for your site
 twitter_username: YourTwitter
 github_username:  YourGitHub
 
