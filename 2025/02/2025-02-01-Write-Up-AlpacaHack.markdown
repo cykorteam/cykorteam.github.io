@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "Write-up for AlpacaHack Round 9 (Crypto)"
+tags: [CTF, AlpacaHack, Crypto, CyKor, ah_p_uh]
 date:   2025-02-01
 ---
 **Written by [Minsun Kim](https://x.com/ah_p_uh)**
@@ -75,18 +76,24 @@ It is easy to notice `additive_share` function's random generation size is fixed
 
 We first arrange what problem we are dealing with by some equations.
 $$
-p = t_1 + t_2 + t_3 \\
+p = t_1 + t_2 + t_3
+$$
+$$
 q = u_1 + u_2 + u_3
 $$
 `t_1, t_2, u_1, u_2` is shared with the user. Let's represent `spq` with those values as well. Note that `w[0], w[1]` is only shared, which are equal to `z[1], z[2]`.
 $$
-z_1 = \textnormal{mul}(\textnormal{sp[1], sq[1]}) + r_1 = (t_1u_1 + t_2u_1 + t_1u_2) + r_1 \\
+z_1 = \textnormal{mul}(\textnormal{sp[1], sq[1]}) + r_1 = (t_1u_1 + t_2u_1 + t_1u_2) + r_1
+$$
+$$
 z_2 = \textnormal{mul}(\textnormal{sp[2], sq[2]}) + r_2 = (t_2u_2 + t_3u_2 + t_2u_3) + r_2
 $$
 By the first equation, we can recover $r_1$, however not so helpful. The next strategy is to assign $t_3 = p - t_1 - t_2, u_3 = q - u_1 - u_2$ to remove unknowns, and we may be able to use the fact $pq = n$ where we know the valae of $n$.
 
 $$
-z_2 = (t_2u_2 + (p - t_1 - t_2)u_2 + t_2(q - u_1 - u_2)) + r_2 \\
+z_2 = (t_2u_2 + (p - t_1 - t_2)u_2 + t_2(q - u_1 - u_2)) + r_2
+$$
+$$
 pu_2 + qt_2 = z_2 + (t_1u_2 + t_2u_1 + t_2u_2) - r_2
 $$
 Since $p, u_2, q, t_2$ are all the values of bitsize 512, so the value should be around 1024 bitsize. However unknown $r_2$ of 512 bit exists, so we can know the 512 most significant bits of $pu_2 + qt_2$. We also know the product of the two terms: $pu_2 * qt_2 = nu_2t_2$.
@@ -587,8 +594,12 @@ assert r^exp == t
 
 Then for some field element $b$, the following equations holds:
 $$
-r^{p + 1} = t \\
-b^{p + 1} = 1 \\
+r^{p + 1} = t
+$$
+$$
+b^{p + 1} = 1
+$$
+$$
 r * b = k
 $$
 
@@ -603,7 +614,7 @@ Using some field cutting magic, let's execute the following:
 P.<x> = PolynomialRing(F)
 root = P(GF(p^2).modulus()).roots()[0][0]
 ```
-Then `root` represents the generator on $\mathbb{F}_{p^2}$, but on $\mathbb{F}_{p^{16}}$! Every $\mathbb{F}_{p^2}$ elements can be written in form of `c1 * x + c2` where `x` is the generator and `aa, bb` are $\mathbb{F}_{p}$ elements, we can finally conclude that every possible $b$ can be written in form of `c1 * root + c2`.
+Then `root` represents the generator on $\mathbb{F}\_{p^2}$, but on $\mathbb{F}\_{p^{16}}$ ! Every $\mathbb{F}\_{p^2}$ elements can be written in form of `c1 * x + c2` where `x` is the generator and `aa, bb` are $\mathbb{F}\_{p}$ elements, we can finally conclude that every possible $b$ can be written in form of `c1 * root + c2`.
 
 > This may be extermely hard to understand if you're not familiar with finite fields.  
 I recommend some cool challenges related to this kind of field magic:  
