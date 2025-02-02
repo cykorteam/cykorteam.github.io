@@ -4,7 +4,9 @@ title:  "Write-up for AlpacaHack Round 9 (Crypto)"
 date:   2025-02-01
 ---
 
-Hello, I am Minsun Kim, also known as `soon-haari` and I participated [AlpacaHack CTF Round 9](https://alpacahack.com/ctfs/round-9/scoreboard) which was held in **1/26**.
+Hello, I am Minsun Kim, also known as `soon-haari` and I participated [AlpacaHack CTF Round 9](https://alpacahack.com/ctfs/round-9/scoreboard) which was held in **1/26**.<br>
+Blog: [https://soon.haari.me/](https://soon.haari.me/)<br>
+X: [@ah_p_uh](https://x.com/ah_p_uh)
 
 [AlpacaHack](https://x.com/AlpacaHack) is a CTF/wargame platform organized by various japanese CTF players. It holds individual CTFs every couple weeks. However unlike [Dreamhack](https://x.com/dreamhack_io)'s weekly CTF, every CTF focuses on a single category which is one of **Pwn, Rev, Web, Crypto**. Both ways should have pros and cons of course, but if you are currently a player focused on one skillbase like Zenitsu and Megumin, more than a all-arounder, you may be interested in participating AlpacaHack CTF.
 
