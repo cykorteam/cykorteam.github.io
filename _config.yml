@@ -21,6 +21,13 @@ sass:
 gems:
   - jemoji
   - jekyll-sitemap
+
+
+highlighter: rouge
+lsi: false
+excerpt_separator: "\n\n"
+incremental: false
+
 # - amp-jekyll # Acceletrated Mobile Pages
 
 # AMP Settings
