@@ -1,26 +1,27 @@
 ---
 layout: post
 title:  "Write-up for AlpacaHack Round 9 (Crypto)"
-tags: [CTF, AlpacaHack, Crypto, CyKor, ah_p_uh]
+tags: [CTF, AlpacaHack, Crypto, CyKor]
 date:   2025-02-01
 ---
 **Written by [Minsun Kim](https://x.com/ah_p_uh)**
 <br>
 <br>
-Hello, I am Minsun Kim, also known as `soon-haari` and I participated [AlpacaHack CTF Round 9](https://alpacahack.com/ctfs/round-9/scoreboard) which was held in **1/26**.<br>
+Hello, I am Minsun Kim, also known as `soon-haari` and I participated [AlpacaHack CTF Round 9](https://alpacahack.com/ctfs/round-9/scoreboard) which was held on **1/26**.<br>
 Blog: [https://soon.haari.me/](https://soon.haari.me/)<br>
 
-[AlpacaHack](https://x.com/AlpacaHack) is a CTF/wargame platform organized by various japanese CTF players. It holds individual CTFs every couple weeks. However unlike [Dreamhack](https://x.com/dreamhack_io)'s weekly CTF, every CTF focuses on a single category which is one of **Pwn, Rev, Web, Crypto**. Both ways should have pros and cons of course, but if you are currently a player focused on one skillbase like Zenitsu and Megumin, more than a all-arounder, you may be interested in participating AlpacaHack CTF.
+[AlpacaHack](https://x.com/AlpacaHack) is a CTF/wargame platform organized by various Japanese CTF players. It holds individual CTFs every couple of weeks. However, unlike [Dreamhack](https://x.com/dreamhack_io)'s weekly CTF, every CTF focuses on a single category of **Pwn, Rev, Web, Crypto**. Both ways should have pros and cons, but if you are a player focused on one skill like Zenitsu and Megumin, more than an all-arounder, you may be interested in participating in AlpacaHack CTF.
 
 ![](./assets/2025-02-01-Write-Up-AlpacaHack-scoreboard.png)
 
-4 challenges were released, and players were given 6 hours to solve it. The difficulty varies from easy challenges to hard ones, so beginners can participate for educational purposes as well. [Chocorusk](https://x.com/nuo_chocorusk) and [maple3142](https://x.com/maple3142) presented the awesome crypto challenges this round, and I will review all 4 challenges. Not only the solution, I will also share the steps I went through, or some struggles.
+4 challenges were released, and players were given 6 hours to solve it. The difficulty varies from easy challenges to hard ones, so beginners can participate for educational purposes as well. [Chocorusk](https://x.com/nuo_chocorusk) and [maple3142](https://x.com/maple3142) presented the awesome crypto challenges this round, and I will review all 4 challenges. Not only the solution, I will also share the steps I went through or some struggles.
 
 Please check out [Chocorusk's write-up](https://chocorusk.hatenablog.com/entry/2025/01/26/180123) and [maple3142's write-up](https://github.com/maple3142/My-CTF-Challenges/tree/master/AlpacaHack%20Round%209/ffmac) as well!
 
 ## RSAMPC (11 solves)
 > I calculated the RSA public key using multi-party computation.  
 Author: Chocorusk
+
 
 **chall.py**
 ```python
@@ -69,10 +70,9 @@ c = pow(bytes_to_long(FLAG + os.urandom(127-len(FLAG))), e, n)
 print("e:", e)
 print("c:", c)
 ```
+A sharing system is implemented, where the sum of 3 values is equal to the secret, and 2 values are shared. Function `multiply_shares` implements multiplying two shares, and we can see it is working fine by `assert n == p*q`.
 
-A sharing system is implemented, where sum of 3 values are equal to the secret, and 2 values are shared. Function `multiply_shares` implements multiplying two shares, and we can see it is working fine by `assert n == p*q`.
-
-It is easy to notice `additive_share` function's random generation size is fixed to 512 bits, which is suspicious. It would be safe for `sp, sq` since `p, q` are 512 bits, however it shouldn't be for reconstructing `n`.
+It is easy to notice `additive_share` function's random generation size is fixed to 512 bits, which is suspicious. It would be safe for `sp, sq` since `p, q` is 512 bits, however, it shouldn't be for reconstructing `n`.
 
 We first arrange what problem we are dealing with by some equations.
 $$
@@ -81,14 +81,14 @@ $$
 $$
 q = u_1 + u_2 + u_3
 $$
-`t_1, t_2, u_1, u_2` is shared with the user. Let's represent `spq` with those values as well. Note that `w[0], w[1]` is only shared, which are equal to `z[1], z[2]`.
+`t_1, t_2, u_1, u_2` is shared with the user. Let's represent `spq` with those values as well. Note that `w[0], w[1]` is only shared, which is equal to `z[1], z[2]`.
 $$
 z_1 = \textnormal{mul}(\textnormal{sp[1], sq[1]}) + r_1 = (t_1u_1 + t_2u_1 + t_1u_2) + r_1
 $$
 $$
 z_2 = \textnormal{mul}(\textnormal{sp[2], sq[2]}) + r_2 = (t_2u_2 + t_3u_2 + t_2u_3) + r_2
 $$
-By the first equation, we can recover $r_1$, however not so helpful. The next strategy is to assign $t_3 = p - t_1 - t_2, u_3 = q - u_1 - u_2$ to remove unknowns, and we may be able to use the fact $pq = n$ where we know the valae of $n$.
+By the first equation, we can recover $r_1$, however not so helpful. The next strategy is to assign $t_3 = p - t_1 - t_2, u_3 = q - u_1 - u_2$ to remove unknowns, and we may be able to use the fact $pq = n$ where we know the value of $n$.
 
 $$
 z_2 = (t_2u_2 + (p - t_1 - t_2)u_2 + t_2(q - u_1 - u_2)) + r_2
@@ -96,9 +96,9 @@ $$
 $$
 pu_2 + qt_2 = z_2 + (t_1u_2 + t_2u_1 + t_2u_2) - r_2
 $$
-Since $p, u_2, q, t_2$ are all the values of bitsize 512, so the value should be around 1024 bitsize. However unknown $r_2$ of 512 bit exists, so we can know the 512 most significant bits of $pu_2 + qt_2$. We also know the product of the two terms: $pu_2 * qt_2 = nu_2t_2$.
+Since $p, u_2, q, t_2$ are all the values of bitsize 512, the value should be around 1024 bitsize. However unknown $r_2$ of 512 bits exists, so we can know the 512 most significant bits of $pu_2 + qt_2$. We also know the product of the two terms: $pu_2 * qt_2 = nu_2t_2$.
 
-We can apply the quadratic formula, because the sum's error is only around $\frac{1}{2^{512}}$, so we can still recover result of $pu_2, qt_2$ with quite a lot of precision, specifically similarly to 512 bits. After dividing the result by $u_2, t_2$ respectively, we can recover $p, q$ value which is theoretically out by only a few bits, and finally finish the factorization.
+We can apply the quadratic formula, because the sum's error is only around $\frac{1}{2^{512}}$, so we can still recover the result of $pu_2, qt_2$ with quite a lot of precision, specifically similarly to 512 bits. After dividing the result by $u_2, t_2$ respectively, we can recover the $p, q$ value which is theoretically out by only a few bits, and finally finish the factorization.
 
 **ex.sage**
 ```python
@@ -137,7 +137,7 @@ from Crypto.Util.number import *
 print(long_to_bytes(m))
 ```
 
-I heard there was someone who solved it by directly pushing the value to z3-solver. Since the relations are quite simple, I assumed it should be doable as well.
+I heard there was someone who solved it by directly pushing the value to the z3-solver. Since the relations are quite simple, I assumed it should be doable as well.
 
 ## addprimes (13 solves)
 > addprimes in PARI/GP is useful for implementing RSA decryption.  
@@ -174,15 +174,15 @@ padded_flag = FLAG + os.urandom(127-len(FLAG))
 print("encrypted flag:", pow(bytes_to_long(padded_flag), e, n))
 ```
 
-The challenge uses SageMath server for an RSA challenge, which implies that the challenge will use some unusual functions. Also, we can notice public exponent `e` is unusually small.
+The challenge uses a SageMath server for an RSA challenge, which implies that the challenge will use some unusual functions. Also, we can notice public exponent `e` is unusually small.
 
-We can immediately think of the case where `e` not being coprime to the ring's multiplicative order `(p - 1) * (q - 1)`. Let's think what will be printed when that happens.
+We can immediately think of the case where `e` is not coprime to the ring's multiplicative order `(p - 1) * (q - 1)`. Let's think about what will be printed when that happens.
 
-Generally, function `nth_root` is not supposed to be calculated on unfactored composite modulo rings, especially like this case when `n` is big, however by calling `pari.addprimes(p)`, the internal factorization is finished, and it can be assumed the result would be CRT of `nth_root` results on prime moduli.
+Generally, function `nth_root` is not supposed to be calculated on unfactored composite modulo rings, especially in this case when `n` is big, however by calling `pari.addprimes(p)`, the internal factorization is finished, and it can be assumed the result would be CRT of `nth_root` results on prime moduli.
 
 If $e \nmid p - 1$, we know the result of `nth_root` is unique, and SageMath knows that too. However, SageMath also knows that the result of `nth_root` is not unique when $e \mid p - 1$.
 
-Which is why `all` parameter exists in SageMath's `nth_root`.
+Which is why the `all` parameter exists in SageMath's `nth_root`.
 ```python
 sage: p = 0x10001
 sage: Fp = GF(p)
@@ -192,7 +192,8 @@ sage: c.nth_root(4)
 sage: c.nth_root(4, all=True)
 [19149, 13131, 46388, 52406]
 ```
-We can notice that the result is not unique, and there's a big chance where the root is not equal to the plaintext that we intended.
+
+We can notice that the result is not unique, and there's a big chance that the root is not equal to the plaintext that we intended.
 
 So by sending $m^e$ to the server, the server will reply $m$ in cases where $e \nmid p - 1$ and $e \nmid q - 1$, however if $e \mid p - 1$, $e \nmid q - 1$, the `nth_root` result should be same with $m$ over modulo $p$ but high chance it's not for $q$.
 
@@ -262,10 +263,10 @@ for _ in range(1000):
 ```
 
 With the limited query of 1000, we have to recover the key when we can set the key to `key + iv`. 
-> If you played [CryptoHack](https://cryptohack.org/) before, and tried the challenge **Oh SNAP** in **Symmetric Ciphers** category, this shouldn't have been too much of a hard challenge.  
-However, I forgot everything about it during the CTF, and went through RC4's wikipedia docs.
+> If you played [CryptoHack](https://cryptohack.org/) before, and tried the challenge **Oh SNAP** in the **Symmetric Ciphers** category, this shouldn't have been too much of a hard challenge.  
+However, I forgot everything about it during the CTF and went through RC4's Wikipedia docs.
 
-[RC4 - Key-scheduling algorithm (KSA)](https://en.wikipedia.org/wiki/RC4#Key-scheduling_algorithm_(KSA)) has a simple implementation of how key is used to permute `S`. It can easily be noticed that the key is repeated unlimited times until 256 iteration is done, which can create lot's of colliding keys.
+[RC4 - Key-scheduling algorithm (KSA)](https://en.wikipedia.org/wiki/RC4#Key-scheduling_algorithm_(KSA)) has a simple implementation of how the key is used to permute `S`. It can easily be noticed that the key is repeated unlimited times until 256 iterations are done, which can create lots of colliding keys.
 
 Assume the key is `"1337deadbeef"` in hex, Then if we set iv to null bytes of length 249, the 256 key stream will be the following:
 ```
@@ -278,11 +279,11 @@ But padded to:
 13 37 de ad be ... 00 00 00 00 00 13
 ```
 
-The result should be equal when we set iv to `bytes([0x00] * 249 + [0x13])`, so that the steram their key generating are the same. We can brute force the possible bytes, which has possibilities within `chars = string.digits + string.ascii_lowercase + string.ascii_uppercase`, so possibilities of 62. Note that this is significantly less than 256, the number of all possible bytes.
+The result should be equal when we set iv to `bytes([0x00] * 249 + [0x13])`, so that the stream their key generating is the same. We can brute force the possible bytes, which have possibilities within `chars = string.digits + string.ascii_lowercase + string.ascii_uppercase`, so possibilities of 62. Note that this is significantly less than 256, the number of all possible bytes.
 
 So max `(62 + 1) * 16 = 1008` queries are needed, in average `(31 + 1) * 16 = 512`.
 
-Hoever, I was in bit of a rush to wait 512 interactive connections :pepega:, so I discarded the last character and made it `(61 + 1) * 16 = 992` queries. The probability is still $\left( \frac{61}{62} \right)^{16} \simeq 0.77$ which is not so bad.
+However, I was in a bit of a rush to wait for 512 interactive connections :pepega:, so I discarded the last character and made it `(61 + 1) * 16 = 992` queries. The probability is still $\left( \frac{61}{62} \right)^{16} \simeq 0.77$ which is not so bad.
 
 **ex.py**
 ```python
@@ -480,9 +481,9 @@ Traceback (most recent call last):
 OverflowError: exponent overflow (65536)
 ```
 
-We can unlimit the exponent surely, but there's no way it can hold exponent till $2^{127}$. But one thing we can notice here is that both of `l, r` consists on single term. During the for loop, there's only multiplication and no addition, which is why it stays as one term.
+We can unlimit the exponent surely, but there's no way it can hold the exponent till $2^{127}$. But one thing we can notice here is that both `l, r` consist of a single term. During the for loop, there's only multiplication and no addition, which is why it stays as one term.
 
-We slightly change the code so that we can see what variables consist those two terms, and how many times(exponent).
+We slightly changed the code so that we can see what variables consist of those two terms, and how many times it is multiplied(exponent).
 ```python
 # x, k1, k2, k3
 l, r = vector([0, 1, 0, 0]), vector([1, 0, 0, 0])
@@ -506,7 +507,7 @@ print(l, r)
 (170141183460469231731687303715884105728, 0, 0, 0) (170141183460469231731687303715884105727, 1, 63, 64)
 ```
 
-This means after the for loop, `l, r` are the following:
+This means after the for loop, `l, r` is the following:
 ```python
 l = x^170141183460469231731687303715884105728
 r = x^170141183460469231731687303715884105727 * k1 * k2^63 * k3^64
@@ -516,10 +517,10 @@ After the final step which is `k4 * l + k5 * r * x + k6`, the result is the foll
 ```python
 (x^170141183460469231731687303715884105728) * (k4 + k1 * k2^63 * k3^64 * k5) + k6
 ```
-We can simplify it to `x^(2^127) * a + b` where `a, b` is constant generated from `mackey`.
+We can simplify it to `x^(2^127) * a + b` where `a, b` is a constant generated from `mackey`.
 
 ### 2. Recover `a, b` and get `mac(key)`
-By using option 1 several times, we can get multiple result of `input^(2^128) * a + b`. Since we can calculate `input^(2^127)`, we can calculate `a, b` using linear equations of `F`.
+By using option 1 several times, we can get multiple results of `input^(2^128) * a + b`. Since we can calculate `input^(2^127)`, we can calculate `a, b` using linear equations of `F`.
 ```python
 p = 2**127 - 1
 k = 16
@@ -554,7 +555,7 @@ root = M.solve_right(r)
 a, b = root
 ```
 
-And we pass some checks in option 2, which is easy to pass with value of `a, b`, and finally receive `mac(key)`! `t` represents `key^(2^127)` in the following code.
+And we pass some checks in option 2, which is easy to pass with the value of `a, b`, and finally receive `mac(key)`! `t` represents `key^(2^127)` in the following code.
 ```python
 io.sendline(b"2")
 io.recvuntil(b"> challenge: ")
@@ -582,11 +583,12 @@ The multiplicative order of `F` is equal to $p^{16} - 1$, and our goal is to cal
 
 Turns out they are not just coprime, but entirely a divisor: $2^{127} \mid p^{16} - 1$. The main reason of this is because $p = 2^{127} - 1$, so $2^{127} = p + 1$ and $p + 1 \mid p^{16} - 1$.
 
-We know the a large number of candidates for `key` which satisfies `key^(2^127) = mackey`, specifically exactly $2^{127}$ candidates. The only clue left for `key` is that their coefficients are very small since it's from `os.urandom(16)`, so every coefficients has possible range `[0, 256)` instead of `[0, p)`.
+We know a large number of candidates for `key` which satisfies `key^(2^127) = mackey`, specifically exactly $2^{127}$ candidates. The only clue left for `key` is that their coefficients are very small since it's from `os.urandom(16)`, so every coefficient has a possible range `[0, 256)` instead of `[0, p)`.
 
 > Here is the part where my approach differs from the intended solution, if you're interested in maple3142's intended solution using [Gröbner basis](https://en.wikipedia.org/wiki/Gr%C3%B6bner_basis), check out his write-up linked above!
 
-We can find an arbitrary `r` where `r^(2^127) == t` simple using `nth_root` function. *Note: try finding root without using `nth_root` function! It would be a good practice to learn about rings.*
+We can find an arbitrary `r` where `r^(2^127) == t` simply using the `nth_root` function. *Note: try finding the root without using the `nth_root` function! It would be a good practice to learn about rings.*
+
 ```python
 r = t.nth_root(exp)
 assert r^exp == t
@@ -603,32 +605,33 @@ $$
 r * b = k
 $$
 
-$k$ is the `key` as element, which has very small coefficients.
+$k$ is the `key` as element type, which has very small coefficients.
 
 However, the smallest polynomial in form $p^d - 1$ which is a multiple of $p + 1$ isn't $p^{16} - 1$. We can see that $p^2 - 1$ also is a multiple of $p + 1$.
 
-Which means every $p + 1$ possibilities of $b$ are also a $\mathbb{F}_{p^2}$ element as well.
+This means every $p + 1$ possibility of $b$ is also a $\mathbb{F}_{p^2}$ element as well.
 
-Using some field cutting magic, let's execute the following:
+Using some field-cutting magic, let's execute the following:
 ```python
 P.<x> = PolynomialRing(F)
 root = P(GF(p^2).modulus()).roots()[0][0]
 ```
-Then `root` represents the generator on $\mathbb{F}\_{p^2}$, but on $\mathbb{F}\_{p^{16}}$ ! Every $\mathbb{F}\_{p^2}$ elements can be written in form of `c1 * x + c2` where `x` is the generator and `aa, bb` are $\mathbb{F}\_{p}$ elements, we can finally conclude that every possible $b$ can be written in form of `c1 * root + c2`.
+Then `root` acts same to the generator on $\mathbb{F}\_{p^2}$, but on $\mathbb{F}\_{p^{16}}$ ! Every $\mathbb{F}\_{p^2}$ elements can be written in form of `c1 * x + c2` where `x` is the generator and `c1, c2` are $\mathbb{F}\_{p}$ elements, we can finally conclude that every possible $b$ can be written in form of `c1 * root + c2`.
 
-> This may be extermely hard to understand if you're not familiar with finite fields.  
+> This may be extremely hard to understand if you're not familiar with finite fields.  
 I recommend some cool challenges related to this kind of field magic:  
 **Cutter - Codegate 2023 Finals**  
 **Quo vadis? - ECSC 2024 Italy**
 
 So we learned that $b = c_1 * \textnormal{root} + c_2$, therefore $k = (r * \textnormal{root}) * c_1 + (r) * c_2$ holds where $c_1, c_2$ are $\mathbb{F}_{p}$ elements.
 
-We can calculate $r * \textnormal{root}, r$ and by treating them as vector with length 16, this finally changes into a simple lattice problem!
+We can calculate $r * \textnormal{root}, r$ and by treating them as vectors with length 16, this finally changes into a simple lattice problem!
 
-> I will not deeply explain about how to construct lattice, or the LLL algorithm, since there are a lot of ways to construct them, and this is relatively a very basic lattice problem at this point.  
+> I will not deeply explain how to construct lattice, or the LLL algorithm, since there are a lot of ways to construct them, and this is relatively a very basic lattice problem at this point.  
 After you clear the Lattices course in CryptoHack, you will be able to understand this very easily!
 
-We apply LLL, and finally recover the `key` to decrypt the flag.
+We apply LLL and finally recover the `key` to decrypt the flag.
+
 ```python
 # answer = ? * d1 + ? * d2
 d1 = list(r * root)
