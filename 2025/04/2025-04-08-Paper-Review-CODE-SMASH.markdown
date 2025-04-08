@@ -83,7 +83,7 @@ The similarity calculation uses two encoders. They are Statement-Level and Funct
 
 The following is a preliminary arrangement of the symbols used in the formula.
 
-$\{c^n\}_{n=1}^2$: $c^n$ indicates each code and two codes are used in one input
+$\{{c^n\}}_{n=1}^2$: $c^n$ indicates each code and two codes are used in one input
 
 $c^n := \{s_i^n\}_{i=1}^{\ell}$: Each code has $l$ statements
 
