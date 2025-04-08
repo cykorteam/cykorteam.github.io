@@ -14,6 +14,8 @@ disqus_shortname: YourDisqusShortname
 # Build settings
 include: [_pages]
 markdown: kramdown
+kramdown:
+  math_engine: katex
 permalink: /:year/:month/:title
 sass:
     style: compressed

@@ -75,30 +75,37 @@ A sharing system is implemented, where the sum of 3 values is equal to the secre
 It is easy to notice `additive_share` function's random generation size is fixed to 512 bits, which is suspicious. It would be safe for `sp, sq` since `p, q` is 512 bits, however, it shouldn't be for reconstructing `n`.
 
 We first arrange what problem we are dealing with by some equations.
+
 $$
 p = t_1 + t_2 + t_3
 $$
+
 $$
 q = u_1 + u_2 + u_3
 $$
+
 `t_1, t_2, u_1, u_2` is shared with the user. Let's represent `spq` with those values as well. Note that `w[0], w[1]` is only shared, which is equal to `z[1], z[2]`.
+
 $$
 z_1 = \textnormal{mul}(\textnormal{sp[1], sq[1]}) + r_1 = (t_1u_1 + t_2u_1 + t_1u_2) + r_1
 $$
+
 $$
 z_2 = \textnormal{mul}(\textnormal{sp[2], sq[2]}) + r_2 = (t_2u_2 + t_3u_2 + t_2u_3) + r_2
 $$
-By the first equation, we can recover $r_1$, however not so helpful. The next strategy is to assign $t_3 = p - t_1 - t_2, u_3 = q - u_1 - u_2$ to remove unknowns, and we may be able to use the fact $pq = n$ where we know the value of $n$.
+By the first equation, we can recover $$r_1$$, however not so helpful. The next strategy is to assign $$t_3 = p - t_1 - t_2, u_3 = q - u_1 - u_2$$ to remove unknowns, and we may be able to use the fact $$pq = n$$ where we know the value of $$n$$.
 
 $$
 z_2 = (t_2u_2 + (p - t_1 - t_2)u_2 + t_2(q - u_1 - u_2)) + r_2
 $$
+
 $$
 pu_2 + qt_2 = z_2 + (t_1u_2 + t_2u_1 + t_2u_2) - r_2
 $$
-Since $p, u_2, q, t_2$ are all the values of bitsize 512, the value should be around 1024 bitsize. However unknown $r_2$ of 512 bits exists, so we can know the 512 most significant bits of $pu_2 + qt_2$. We also know the product of the two terms: $pu_2 * qt_2 = nu_2t_2$.
 
-We can apply the quadratic formula, because the sum's error is only around $\frac{1}{2^{512}}$, so we can still recover the result of $pu_2, qt_2$ with quite a lot of precision, specifically similarly to 512 bits. After dividing the result by $u_2, t_2$ respectively, we can recover the $p, q$ value which is theoretically out by only a few bits, and finally finish the factorization.
+Since $$p, u_2, q, t_2$$ are all the values of bitsize 512, the value should be around 1024 bitsize. However unknown $$r_2$$ of 512 bits exists, so we can know the 512 most significant bits of $$pu_2 + qt_2$$. We also know the product of the two terms: $$pu_2 * qt_2 = nu_2t_2$$.
+
+We can apply the quadratic formula, because the sum's error is only around $$\frac{1}{2^{512}}$$, so we can still recover the result of $$pu_2, qt_2$$ with quite a lot of precision, specifically similarly to 512 bits. After dividing the result by $$u_2, t_2$$ respectively, we can recover the $$p, q$$ value which is theoretically out by only a few bits, and finally finish the factorization.
 
 **ex.sage**
 ```python
@@ -121,11 +128,11 @@ p = ((z^2 - 4 * mul).sqrt() + z) / (2 * u2)
 p = round(p)
 
 for i in range(-500, 500):
-	if n % (p + i) == 0:
-		p = p + i
-		break
+    if n % (p + i) == 0:
+        p = p + i
+        break
 else:
-	print("fail")
+    print("fail")
 
 q = n // p
 phi = (p - 1) * (q - 1)
@@ -180,7 +187,7 @@ We can immediately think of the case where `e` is not coprime to the ring's mult
 
 Generally, function `nth_root` is not supposed to be calculated on unfactored composite modulo rings, especially in this case when `n` is big, however by calling `pari.addprimes(p)`, the internal factorization is finished, and it can be assumed the result would be CRT of `nth_root` results on prime moduli.
 
-If $e \nmid p - 1$, we know the result of `nth_root` is unique, and SageMath knows that too. However, SageMath also knows that the result of `nth_root` is not unique when $e \mid p - 1$.
+If $$e \nmid p - 1$$, we know the result of `nth_root` is unique, and SageMath knows that too. However, SageMath also knows that the result of `nth_root` is not unique when $$e \mid p - 1$$.
 
 Which is why the `all` parameter exists in SageMath's `nth_root`.
 ```python
@@ -195,9 +202,9 @@ sage: c.nth_root(4, all=True)
 
 We can notice that the result is not unique, and there's a big chance that the root is not equal to the plaintext that we intended.
 
-So by sending $m^e$ to the server, the server will reply $m$ in cases where $e \nmid p - 1$ and $e \nmid q - 1$, however if $e \mid p - 1$, $e \nmid q - 1$, the `nth_root` result should be same with $m$ over modulo $p$ but high chance it's not for $q$.
+So by sending $$m^e$$ to the server, the server will reply $$m$$ in cases where $$e \nmid p - 1$$ and $$e \nmid q - 1$$, however if $$e \mid p - 1$$, $$e \nmid q - 1$$, the `nth_root` result should be same with $$m$$ over modulo $$p$$ but high chance it's not for $$q$$.
 
-Thus, by calculating $\textnormal{GCD}(n, m - \textnormal{server\_m})$ would spit out one of the factors in around $\frac{2}{e}$ chance.
+Thus, by calculating $$\textnormal{GCD}(n, m - \textnormal{server\_m})$$ would spit out one of the factors in around $$\frac{2}{e}$$ chance.
 
 Brute-forcing the following code a bit would easily recover the factors. Then we can decrypt the encrypted flag.
 
@@ -208,24 +215,24 @@ from pwn import *
 a = randrange(2^1000)
 
 while True:
-	# io = process(["sage", "server.sage"])
-	io = remote("34.170.146.252", 20209r)
+    # io = process(["sage", "server.sage"])
+    io = remote("34.170.146.252", 20209r)
 
-	io.recvuntil(b"n: ")
-	n = ZZ(int(io.recvline()))
+    io.recvuntil(b"n: ")
+    n = ZZ(int(io.recvline()))
 
-	io.sendline(str(pow(a, 37, n)).encode())
+    io.sendline(str(pow(a, 37, n)).encode())
 
-	io.recvuntil(b"plaintext: ")
-	pt = ZZ(int(io.recvline()))
-	io.recvuntil(b"flag: ")
-	enc = ZZ(int(io.recvline()))
+    io.recvuntil(b"plaintext: ")
+    pt = ZZ(int(io.recvline()))
+    io.recvuntil(b"flag: ")
+    enc = ZZ(int(io.recvline()))
 
-	io.close()
+    io.close()
 
-	if pt == a:
-		continue
-	break
+    if pt == a:
+        continue
+    break
 
 p = gcd(a - pt, n)
 q = n // p
@@ -283,7 +290,7 @@ The result should be equal when we set iv to `bytes([0x00] * 249 + [0x13])`, so 
 
 So max `(62 + 1) * 16 = 1008` queries are needed, in average `(31 + 1) * 16 = 512`.
 
-However, I was in a bit of a rush to wait for 512 interactive connections :pepega:, so I discarded the last character and made it `(61 + 1) * 16 = 992` queries. The probability is still $\left( \frac{61}{62} \right)^{16} \simeq 0.77$ which is not so bad.
+However, I was in a bit of a rush to wait for 512 interactive connections :pepega:, so I discarded the last character and made it `(61 + 1) * 16 = 992` queries. The probability is still $$\left( \frac{61}{62} \right)^{16} \simeq 0.77$$ which is not so bad.
 
 **ex.py**
 ```python
@@ -304,30 +311,30 @@ io = remote("34.170.146.252", 38920)
 key = b""
 
 for pos in trange(16):
-	assert len(key) == pos
+    assert len(key) == pos
 
-	pfx = bytes(255 - pos - 16)
-	io.sendline(pfx.hex().encode())
-	io.sendline(bytes(32).hex().encode())
+    pfx = bytes(255 - pos - 16)
+    io.sendline(pfx.hex().encode())
+    io.sendline(bytes(32).hex().encode())
 
-	for i in range(l):
-		to_send = pfx + key + chars[i].encode()
-		io.sendline(to_send.hex().encode())
-		io.sendline(bytes(32).hex().encode())
+    for i in range(l):
+        to_send = pfx + key + chars[i].encode()
+        io.sendline(to_send.hex().encode())
+        io.sendline(bytes(32).hex().encode())
 
-	pts = []
-	for i in range(l + 1):
-		io.recvuntil(b"plaintext: ")
-		pt = bytes.fromhex(io.recvline().decode())
-		pts.append(pt)
+    pts = []
+    for i in range(l + 1):
+        io.recvuntil(b"plaintext: ")
+        pt = bytes.fromhex(io.recvline().decode())
+        pts.append(pt)
 
-	real, pts = pts[0], pts[1:]
-	by = pts.index(real)
+    real, pts = pts[0], pts[1:]
+    by = pts.index(real)
 
-	if by == -1:
-		print("fail")
-		exit()
-	key += chars[by].encode()
+    if by == -1:
+        print("fail")
+        exit()
+    key += chars[by].encode()
 
 ct = ARC4.new(key, drop=3072).decrypt(bytes(16))
 ct = xor(key, ct)
@@ -416,7 +423,7 @@ while True:
         exit(1)
 ```
 
-There exists a finite field with order $p^{16}$ where $p = 2^{127} - 1$. `mackey` is a list of 6 field elements, and function `ffmac` is a function with one field element as input, and outputs one field element as well.
+There exists a finite field with order $$p^{16}$$ where $$p = 2^{127} - 1$$. `mackey` is a list of 6 field elements, and function `ffmac` is a function with one field element as input, and outputs one field element as well.
 
 We can predict that the scenario is:
 - Recover the `mackey` with option 1
@@ -481,7 +488,7 @@ Traceback (most recent call last):
 OverflowError: exponent overflow (65536)
 ```
 
-We can unlimit the exponent surely, but there's no way it can hold the exponent till $2^{127}$. But one thing we can notice here is that both `l, r` consist of a single term. During the for loop, there's only multiplication and no addition, which is why it stays as one term.
+We can unlimit the exponent surely, but there's no way it can hold the exponent till $$2^{127}$$. But one thing we can notice here is that both `l, r` consist of a single term. During the for loop, there's only multiplication and no addition, which is why it stays as one term.
 
 We slightly changed the code so that we can see what variables consist of those two terms, and how many times it is multiplied(exponent).
 ```python
@@ -535,16 +542,16 @@ io = process(["sage", "server.sage"])
 xs = []
 
 for i in range(3):
-	msg = os.urandom(8).hex().encode()
-	io.sendline(b"1")
-	io.sendline(msg)
-	xs.append(F(list(msg)))
+    msg = os.urandom(8).hex().encode()
+    io.sendline(b"1")
+    io.sendline(msg)
+    xs.append(F(list(msg)))
 
 res = []
 for i in range(3):
-	io.recvuntil(b"> input: mac(input): ")
-	r = literal_eval(io.recvline().decode())
-	res.append(F(r))
+    io.recvuntil(b"> input: mac(input): ")
+    r = literal_eval(io.recvline().decode())
+    res.append(F(r))
 
 exp = 2^127
 
@@ -579,11 +586,11 @@ t = (mac - b) / a
 ```
 
 ### 3. Recover `key` from `key^(2^127)`
-The multiplicative order of `F` is equal to $p^{16} - 1$, and our goal is to calculate `key` from `key^(127)`. However when I tried to calculate `d = pow(2^127, -1, p^16 - 1)`, like general RSA decryption, it says inverse doesn't exist because they're not coprime, which is bad.
+The multiplicative order of `F` is equal to $$p^{16} - 1$$, and our goal is to calculate `key` from `key^(127)`. However when I tried to calculate `d = pow(2^127, -1, p^16 - 1)`, like general RSA decryption, it says inverse doesn't exist because they're not coprime, which is bad.
 
-Turns out they are not just coprime, but entirely a divisor: $2^{127} \mid p^{16} - 1$. The main reason of this is because $p = 2^{127} - 1$, so $2^{127} = p + 1$ and $p + 1 \mid p^{16} - 1$.
+Turns out they are not just coprime, but entirely a divisor: $$2^{127} \mid p^{16} - 1$$. The main reason of this is because $$p = 2^{127} - 1$$, so $$2^{127} = p + 1$$ and $$p + 1 \mid p^{16} - 1$$.
 
-We know a large number of candidates for `key` which satisfies `key^(2^127) = mackey`, specifically exactly $2^{127}$ candidates. The only clue left for `key` is that their coefficients are very small since it's from `os.urandom(16)`, so every coefficient has a possible range `[0, 256)` instead of `[0, p)`.
+We know a large number of candidates for `key` which satisfies `key^(2^127) = mackey`, specifically exactly $$2^{127}$$ candidates. The only clue left for `key` is that their coefficients are very small since it's from `os.urandom(16)`, so every coefficient has a possible range `[0, 256)` instead of `[0, p)`.
 
 > Here is the part where my approach differs from the intended solution, if you're interested in maple3142's intended solution using [Gröbner basis](https://en.wikipedia.org/wiki/Gr%C3%B6bner_basis), check out his write-up linked above!
 
@@ -594,38 +601,41 @@ r = t.nth_root(exp)
 assert r^exp == t
 ```
 
-Then for some field element $b$, the following equations holds:
+Then for some field element $$b$$, the following equations holds:
+
 $$
 r^{p + 1} = t
 $$
+
 $$
 b^{p + 1} = 1
 $$
+
 $$
 r * b = k
 $$
 
-$k$ is the `key` as element type, which has very small coefficients.
+$$k$$ is the `key` as element type, which has very small coefficients.
 
-However, the smallest polynomial in form $p^d - 1$ which is a multiple of $p + 1$ isn't $p^{16} - 1$. We can see that $p^2 - 1$ also is a multiple of $p + 1$.
+However, the smallest polynomial in form $$p^d - 1$$ which is a multiple of $$p + 1$$ isn't $$p^{16} - 1$$. We can see that $$p^2 - 1$$ also is a multiple of $$p + 1$$.
 
-This means every $p + 1$ possibility of $b$ is also a $\mathbb{F}_{p^2}$ element as well.
+This means every $$p + 1$$ possibility of $$b$$ is also a $$\mathbb{F}_{p^2}$$ element as well.
 
 Using some field-cutting magic, let's execute the following:
 ```python
 P.<x> = PolynomialRing(F)
 root = P(GF(p^2).modulus()).roots()[0][0]
 ```
-Then `root` acts same to the generator on $\mathbb{F}\_{p^2}$, but on $\mathbb{F}\_{p^{16}}$ ! Every $\mathbb{F}\_{p^2}$ elements can be written in form of `c1 * x + c2` where `x` is the generator and `c1, c2` are $\mathbb{F}\_{p}$ elements, we can finally conclude that every possible $b$ can be written in form of `c1 * root + c2`.
+Then `root` acts same to the generator on $$\mathbb{F}\_{p^2}$$, but on $$\mathbb{F}\_{p^{16}}$$ ! Every $$\mathbb{F}\_{p^2}$$ elements can be written in form of `c1 * x + c2` where `x` is the generator and `c1, c2` are $$\mathbb{F}\_{p}$$ elements, we can finally conclude that every possible $$b$$ can be written in form of `c1 * root + c2`.
 
 > This may be extremely hard to understand if you're not familiar with finite fields.  
 I recommend some cool challenges related to this kind of field magic:  
 **Cutter - Codegate 2023 Finals**  
 **Quo vadis? - ECSC 2024 Italy**
 
-So we learned that $b = c_1 * \textnormal{root} + c_2$, therefore $k = (r * \textnormal{root}) * c_1 + (r) * c_2$ holds where $c_1, c_2$ are $\mathbb{F}_{p}$ elements.
+So we learned that $$b = c_1 * \textnormal{root} + c_2$$, therefore $$k = (r * \textnormal{root}) * c_1 + (r) * c_2$$ holds where $$c_1, c_2$$ are $$\mathbb{F}_{p}$$ elements.
 
-We can calculate $r * \textnormal{root}, r$ and by treating them as vectors with length 16, this finally changes into a simple lattice problem!
+We can calculate $$r * \textnormal{root}, r$$ and by treating them as vectors with length 16, this finally changes into a simple lattice problem!
 
 > I will not deeply explain how to construct lattice, or the LLL algorithm, since there are a lot of ways to construct them, and this is relatively a very basic lattice problem at this point.  
 After you clear the Lattices course in CryptoHack, you will be able to understand this very easily!
@@ -644,20 +654,20 @@ M[1, 1] = 1
 weight = 2^127 // 2^8
 
 for i in range(16):
-	M[0, 2 + i] = ZZ(d1[i]) * weight
-	M[1, 2 + i] = ZZ(d2[i]) * weight
-	M[2 + i, 2 + i] = p * weight
+    M[0, 2 + i] = ZZ(d1[i]) * weight
+    M[1, 2 + i] = ZZ(d2[i]) * weight
+    M[2 + i, 2 + i] = p * weight
 
 M = M.LLL()
 
 for v in M:
-	if v[-2] == 0:
-		continue
-	break
+    if v[-2] == 0:
+        continue
+    break
 
 v = v[2:] / weight
 if v[0] < 0:
-	v = -v
+    v = -v
 key = bytes(list(v))
 
 from Crypto.Cipher import AES
