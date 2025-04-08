@@ -3,6 +3,7 @@ layout: post
 title:  "[Paper Review] CODE-SMASH: Source-Code Vulnerability Detection Using Siamese and Multi-Level Neural Architecture"
 tags: [AI for Hacking, Hacking, Deeplearning, Review, CyKor]
 date:   2025-04-08
+katex: True
 ---
 **Written by [Jinkyung Bae](https://www.linkedin.com/in/%EC%A7%84%EA%B2%BD-%EB%B0%B0-a6a2ab287/)**
 <br>
@@ -55,17 +56,20 @@ Source: CODE-SMASH: Source-Code Vulnerability Detection Using Siamese and Multi-
    $$
    p(w_O|w_I) = \frac{\exp(v_{w_O}^T v_{w_I})}{\sum_{w=1}^W \exp(v_w^T v_{w_I})}
    $$
-   $w_O$: Center Word
+   
+   $$w_O$$: Center Word
 
-   $w_I$: Surrounding Word
+   $$w_I$$: Surrounding Word
 
-   $p(w_O|w_I)$: probability of discovering $w_O$ from $w_I$
+   $$
+   p(w_O|w_I)
+   $$: probability of discovering $$w_O$$ from $$w_I$$
 
-   $v_{w_O}^T v_{w_I}$: similarity between $w_O$ and $w_I$
+   $$v_{w_O}^T v_{w_I}$$: similarity between $$w_O$$ and $$w_I$$
 
    
 
-   The probability of finding $w_O$ in $w_I$ is calculated by dividing the similarity between the two words into the overall similarity.
+   The probability of finding $$w_O$$ in $$w_I$$ is calculated by dividing the similarity between the two words into the overall similarity.
 
    
 
@@ -83,11 +87,11 @@ The similarity calculation uses two encoders. They are Statement-Level and Funct
 
 The following is a preliminary arrangement of the symbols used in the formula.
 
-$\{{c^n\}}_{n=1}^2$: $c^n$ indicates each code and two codes are used in one input
+$$\{c^n\}_{n=1}^2$$: $$c^n$$ indicates each code and two codes are used in one input
 
-$c^n := \{s_i^n\}_{i=1}^{\ell}$: Each code has $l$ statements
+$$c^n := \{s_i^n\}_{i=1}^{\ell}$$: Each code has $$l$$ statements
 
-$s_i^n := \{t_{i,j}^n\}_{j=1}^k$: Each statement has $k$ tokens.
+$$s_i^n := \{t_{i,j}^n\}_{j=1}^k$$: Each statement has $$k$$ tokens.
 
 
 
@@ -95,15 +99,16 @@ $s_i^n := \{t_{i,j}^n\}_{j=1}^k$: Each statement has $k$ tokens.
 
    A hidden state in two directions is generated using BiGRU. Each hidden state indicates contextual information. A hidden state in two directions is connected into one pair, and each hidden state and weight are calculated through the additive self-attention layer to calculate the score of the final statement.
 
+   $$\{\overrightarrow{ {h}_{i,1}^n}, \ldots, \overrightarrow{ {h}_{i,k}^n}\} $$
    
+   : Forward direction hidden state for $$\{t_{i,j}^n\}$$ 
 
-   $\{\overrightarrow{ {h}_{i,1}^n}, \ldots, \overrightarrow{ {h}_{i,k}^n}\}$: Forward direction hidden state for $\{t_{i,j}^n\}$ 
-
-   $\{\overleftarrow{ {h}_{i,1}^n}, \ldots, \overleftarrow{ {h}_{i,k}^n}\}$: Reverse direction hidden state for $\{t_{i,j}^n\}$
-
+   $$\{\overleftarrow{ {h}_{i,1}^n}, \ldots, \overleftarrow{ {h}_{i,k}^n}\}$$
    
+   : Reverse direction hidden state for $$\{t_{i,j}^n\}$$
 
    Since not all hidden states are equally important, add the importance of each hidden state to the calculation results through additive-self attention mechanism. At this time, hidden states in the positive and opposite directions are combined to generate one hidden state.
+
    $$
    {h}_{i,j}^n = [\overrightarrow{ {h}_{i,1}^n};\overleftarrow{ {h}_{i,1}^n}]
    $$
@@ -112,17 +117,17 @@ $s_i^n := \{t_{i,j}^n\}_{j=1}^k$: Each statement has $k$ tokens.
    v_j = tanh(W^T{h}_{i,j}^n+b)
    $$
 
-   $W$: First layer's weight
+   $$W$$: First layer's weight
 
-   $b$: First layer's bias
+   $$b$$: First layer's bias
 
-   $v_j$: Output of the first fully connected layer
+   $$v_j$$: Output of the first fully connected layer
    $$
    \alpha_j = \frac{\exp(v_{j}^T q)}{\sum_{j} \exp(v_{j}^T q)}
    $$
-   $q$: Second layer's weight
+   $$q$$: Second layer's weight
 
-   $\alpha_j$: Attention score (represents ${h}_{i,j}^n$'s importance)
+   $$\alpha_j$$: Attention score (represents $${h}_{i,j}^n$$'s importance)
 
    
 
@@ -142,7 +147,8 @@ $s_i^n := \{t_{i,j}^n\}_{j=1}^k$: Each statement has $k$ tokens.
    $$
    \tilde{s}_i^n = \sum_{j=1}^{k} \alpha_j h_{i,j}^n
    $$
-   $\tilde{s}_i^n$: Statement-level code feature
+
+   $$\tilde{s}_i^n$$: Statement-level code feature
 
    A previously obtained attachment score and hidden state are multiplied to store information of the statement.
 
@@ -155,11 +161,11 @@ $s_i^n := \{t_{i,j}^n\}_{j=1}^k$: Each statement has $k$ tokens.
    In the first stage, statement-level is extracted, and in the second stage, function-level is extracted. Other processes are the same as Statement-Level.
 
    
-
    $$
    {h}_{i}^n = [\overrightarrow{ {h}_{i}^n};\overleftarrow{ {h}_{i}^n}]
    $$
-   ${h}_{i}^n$: $\hat{s}_i^n$ (statement information)'s hidden state
+   
+   $${h}_{i}^n$$: $$\hat{s}_i^n$$ (statement information)'s hidden state
 
    
 
@@ -176,7 +182,7 @@ $$
    \tilde{c}^n = \sum_{i=1}^{l} \hat{\alpha_i} \hat{h_{i}^n}
 $$
 
-   $\tilde{c}^n$: Functional-level code feature
+   $$\tilde{c}^n$$: Functional-level code feature
 
    
 
@@ -189,7 +195,7 @@ $$
    \sigma(f'(ReLU(f(x)))) > \tau
    $$
    
-   $\tau$: Threshold
+   $$\tau$$: Threshold
 
 ​    
 
@@ -209,10 +215,8 @@ The experimental results are evaluated on a total of five criteria.
 
    
 
-   <img src="./assets/2025-04-08-Paper-Review-CODE-SMASH-image3.png" alt="image3" style="zoom:40%;" />
-
-   
-
+   <img src="./assets/2025-04-08-Paper-Review-CODE-SMASH-image3.png" alt="image3" style="zoom:40%;" />   
+<br>
 2. ROC, AUC
 
    The ROC can check the tradeoff between sensitivity (true positive rate) and specificity (1-false positive rate). AUC means the area under the ROC graph, and the higher the performance of the model, the better. CODE-SMASH has the largest AUC value and proved excellent performance.
@@ -221,30 +225,24 @@ The experimental results are evaluated on a total of five criteria.
 
    
 
-   <img src="./assets/2025-04-08-Paper-Review-CODE-SMASH-image4.png" alt="image4" style="zoom:75%;" />
-
-   
-
+   <img src="./assets/2025-04-08-Paper-Review-CODE-SMASH-image4.png" alt="image4" style="zoom:75%;" />   
+<br>
 3. Code length
 
    The proportion of long codes is also quite high in the datasets. In this experiment, the length of the code was divided into short (~30), medium (30~60), and long (60~80). CODE-SMASH achieved the best results for all lengths. This shows that CODE-SMASH can actually produce accurate results even in real vulnerable code sensing situations.
 
    
 
-   <img src="./assets/2025-04-08-Paper-Review-CODE-SMASH-image5.png" alt="image5" style="zoom:30%;" />
-
-   
-
+   <img src="./assets/2025-04-08-Paper-Review-CODE-SMASH-image5.png" alt="image5" style="zoom:30%;" />  
+<br>
 4. Effects of Siamese, Hierarchical Structure
 
    The experiment was designed to examine the effectiveness of each structure, so CODE-SMASH(T) using only token-level information and CODE-SMASH(S) using only statement-level information were also conducted. As a result of the experiment, CODE-SMASHs were almost excellent. Through this, it can be seen that models that combine SNN and multiple hierarchical levels can understand complex and long codes well.
 
    
 
-   <img src="./assets/2025-04-08-Paper-Review-CODE-SMASH-image6.png" alt="image6" style="zoom:40%;" />
-
-   
-
+   <img src="./assets/2025-04-08-Paper-Review-CODE-SMASH-image6.png" alt="image6" style="zoom:40%;" />   
+<br>
 5. Computation time
 
    Calculate how long it will take to process 1000 samples. CODE-SMASH is not the best, but considering its sensing performance, and the fact that it is 2.43 times faster than VDSimilar, which has the second best performance, so it seems fine with processing time.
@@ -254,7 +252,7 @@ The experimental results are evaluated on a total of five criteria.
    <img src="./assets/2025-04-08-Paper-Review-CODE-SMASH-image7.png" alt="image7" style="zoom:40%;" />
    
    
-
+<br>
 ## 4. Conclusion
 
 This paper proposed CODE-SMASH, a model that senses weaknesses through the hierarchical structure and similarity of code. Which is showing better performance than the previous models. In addition to the model, a source code processing method that increases the efficiency of code analysis such as annotation removal, tokenization, and vectorization were proposed.
@@ -262,7 +260,7 @@ This paper proposed CODE-SMASH, a model that senses weaknesses through the hiera
 In modern society, an automated vulnerability detection system is essential because the type, length, and amount of code will increase. Therefore, the use and development of CODE-SMASH will greatly contribute to software security.
 
 
-
+<br>
 ## 5. Limitation
 
 CODE-SMASH is a good model, but as mentioned in the paper, there are still many things to be improved.
