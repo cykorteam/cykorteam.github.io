@@ -6,9 +6,6 @@ date:   2025-04-08
 ---
 **Written by [Jinkyung Bae](https://www.linkedin.com/in/%EC%A7%84%EA%B2%BD-%EB%B0%B0-a6a2ab287/)**
 <br>
-<br>
-
-
 This is a review on the study of an automated vulnerability sensing model called CODE-SMASH.
 
 [CODE-SMASH: Source-Code Vulnerability Detection Using Siamese and Multi-Level Neural Architecture](https://ieeexplore.ieee.org/document/10606264)
@@ -100,15 +97,15 @@ $s_i^n := \{t_{i,j}^n\}_{j=1}^k$: Each statement has $k$ tokens.
 
    
 
-   $\{\overrightarrow{\{h}_\{i,1}^n}, \ldots, \overrightarrow{\{h}_\{i,k}^n}\}$: Forward direction hidden state for $\{t_\{i,j}^n\}$ 
+   $\{\overrightarrow{ {h}_{i,1}^n}, \ldots, \overrightarrow{ {h}_{i,k}^n}\}$: Forward direction hidden state for $\{t_{i,j}^n\}$ 
 
-   $\{\overleftarrow{\{h}_\{i,1}^n}, \ldots, \overleftarrow{\{h}_\{i,k}^n}\}$: Reverse direction hidden state for $\{t_\{i,j}^n\}$
+   $\{\overleftarrow{ {h}_{i,1}^n}, \ldots, \overleftarrow{ {h}_{i,k}^n}\}$: Reverse direction hidden state for $\{t_{i,j}^n\}$
 
    
 
    Since not all hidden states are equally important, add the importance of each hidden state to the calculation results through additive-self attention mechanism. At this time, hidden states in the positive and opposite directions are combined to generate one hidden state.
    $$
-   {h}_{i,j}^n = [\overrightarrow{\{h}_{i,1}^n};\overleftarrow{\{h}_{i,1}^n}]
+   {h}_{i,j}^n = [\overrightarrow{ {h}_{i,1}^n};\overleftarrow{ {h}_{i,1}^n}]
    $$
 
    $$
@@ -160,14 +157,14 @@ $s_i^n := \{t_{i,j}^n\}_{j=1}^k$: Each statement has $k$ tokens.
    
 
    $$
-   {h}_{i}^n = [\overrightarrow{\{h}_{i}^n};\overleftarrow{\{h}_{i}^n}]
+   {h}_{i}^n = [\overrightarrow{ {h}_{i}^n};\overleftarrow{ {h}_{i}^n}]
    $$
    ${h}_{i}^n$: $\hat{s}_i^n$ (statement information)'s hidden state
 
    
 
    $$
-   \hat{v_i} = tanh(\hat{W^T}\hat{\{h}_{i}^n}+\hat{b})
+   \hat{v_i} = tanh(\hat{W^T}\hat{ {h}_{i}^n}+\hat{b})
    $$
 
 
