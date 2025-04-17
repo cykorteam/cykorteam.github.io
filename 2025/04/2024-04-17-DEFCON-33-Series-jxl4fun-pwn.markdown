@@ -193,9 +193,9 @@ if y > 0
     SET 4  // y > 0
 if x > 2 // <- ELSE OF y > 0 --> (y == 0)
     if x > 3 
-        SET 3 // y == 0, x == 3
-    SET 2  // ELSE OF x > 3 --> y == 0, x == 2
-Set 1 // The rest 
+        SET 3 // y == 0, x > 3
+    SET 2  // ELSE OF x > 3 --> y == 0, x == 3
+Set 1 // ELSE OF x>3, x <= 2
 ```
 
 
