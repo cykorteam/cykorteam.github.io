@@ -191,7 +191,7 @@ For example, If you want to insert conditions into (0,2) and (0,3) respectively,
 ```
 if y > 0
     SET 4  // y > 0
-if x > 2 // <- ELSE OF y > 0 --> (y == 0)
+if x > 2 // ELSE OF y > 0 --> (y == 0)
     if x > 3 
         SET 3 // y == 0, x > 3
     SET 2  // ELSE OF x > 3 --> y == 0, x == 3
