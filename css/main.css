@@ -321,7 +321,7 @@ pre,code {
     border-radius: 4px;
     background: #FDFDFD;
     border: 1px solid #E8E8EB;
-    color: #93a1a1
+    color: #000000
 }
 
 .highlight .gutter {
@@ -347,11 +347,11 @@ span.lineno {
 }
 
 .highlight .err {
-    color: #93a1a1
+    color: #000000
 }
 
 .highlight .g {
-    color: #93a1a1
+    color: #000000
 }
 
 .highlight .k {
@@ -359,11 +359,11 @@ span.lineno {
 }
 
 .highlight .l {
-    color: #93a1a1
+    color: #000000
 }
 
 .highlight .n {
-    color: #93a1a1
+    color: #000000
 }
 
 .highlight .o {
@@ -375,7 +375,7 @@ span.lineno {
 }
 
 .highlight .p {
-    color: #93a1a1
+    color: #000000
 }
 
 .highlight .cm {
@@ -399,7 +399,7 @@ span.lineno {
 }
 
 .highlight .ge {
-    color: #93a1a1;
+    color: #000000;
     font-style: italic
 }
 
@@ -416,15 +416,15 @@ span.lineno {
 }
 
 .highlight .go {
-    color: #93a1a1
+    color: #000000
 }
 
 .highlight .gp {
-    color: #93a1a1
+    color: #000000
 }
 
 .highlight .gs {
-    color: #93a1a1;
+    color: #000000;
     font-weight: bold
 }
 
@@ -433,7 +433,7 @@ span.lineno {
 }
 
 .highlight .gt {
-    color: #93a1a1
+    color: #000000
 }
 
 .highlight .kc {
@@ -461,7 +461,7 @@ span.lineno {
 }
 
 .highlight .ld {
-    color: #93a1a1
+    color: #000000
 }
 
 .highlight .m {
@@ -473,7 +473,7 @@ span.lineno {
 }
 
 .highlight .na {
-    color: #93a1a1
+    color: #000000
 }
 
 .highlight .nb {
@@ -505,19 +505,19 @@ span.lineno {
 }
 
 .highlight .nl {
-    color: #93a1a1
+    color: #000000
 }
 
 .highlight .nn {
-    color: #93a1a1
+    color: #000000
 }
 
 .highlight .nx {
-    color: #93a1a1
+    color: #000000
 }
 
 .highlight .py {
-    color: #93a1a1
+    color: #000000
 }
 
 .highlight .nt {
@@ -533,7 +533,7 @@ span.lineno {
 }
 
 .highlight .w {
-    color: #93a1a1
+    color: #000000
 }
 
 .highlight .mf {
@@ -561,7 +561,7 @@ span.lineno {
 }
 
 .highlight .sd {
-    color: #93a1a1
+    color: #000000
 }
 
 .highlight .s2 {
@@ -573,7 +573,7 @@ span.lineno {
 }
 
 .highlight .sh {
-    color: #93a1a1
+    color: #000000
 }
 
 .highlight .si {
