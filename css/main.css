@@ -209,6 +209,12 @@ pre {
     margin-bottom: 1.8rem
 }
 
+.c-article__main h1 {
+    line-height: 1.5;
+    font-size: 2.9rem
+}
+
+
 .c-article__main h2 {
     line-height: 1.5;
     font-size: 2.4rem
