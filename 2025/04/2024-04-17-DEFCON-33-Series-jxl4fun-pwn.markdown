@@ -6,15 +6,15 @@ date:   2025-04-17
 katex: True
 ---
 
-Written By **[https://x.com/howdays1](Jinheon Lee)**
-<br>
-<br>
-Hello! 👋, I'm Jinheon Lee (`howdays`) and I participated [DEFCON33 Quals](https://nautilus.institute/) as HypeBoy. (I failed to obtain the qualifcation for final 😭, but Cykor did it! 😊)  
+Written By **[Jinheon Lee](https://x.com/howdays1)**
+<hr>
+Hello! 👋, I'm Jinheon Lee (`howdays`) and I participated [DEFCON33 Quals](https://nautilus.institute/) as HypeBoy. (I failed to obtain the qualifcation for the final 😭, but Cykor did it! 😊)  
 Blog: [https://howdays.blog/](https://howdays.blog/)  
+X: [@howdays1](https://x.com/howdays1)  
 LinkedIn: [https://www.linkedin.com/in/jinheon-lee-4319b2249/](linkedin.com/in/jinheon-lee-4319b2249/)
 
 I'm gonna write down the jxl4fun2 (pwn), which I took the initiative to solve and I was very impressed by.
-
+<hr>
 # What is JPEG-XL?
 [JPEG-XL](https://jpegxl.info/) is an image format which provides state-of-the-art encoding and decoding future.    
 Almost image formats facilitate compression by predicting pixels. For instance, AV1 format features various prediction mode for next pixel block.  
@@ -55,6 +55,7 @@ These way is called **JXL ART**, with the JXL ART code, the [jxl_from_tree](http
 
 The vulnerabilties of this challenge is intended to be exploited by using this code. For exploit, I made the exploit code which computes binary tree and generates JXL art code automatically. What I thought crucially was an each pixel has to hold only one distinct condition. If not, not only the `jxl_from_tree` emits error but the JXL main binary can't translate invalid format and emits error too.
 
+<hr>
 # JXL4FUN
 
 ## Vulnerability
@@ -211,9 +212,8 @@ The exploit process is so easy, comparing with the generating JXL code process.
 3. Choose a class expected to call its destructor, afterward, Overwrite its vtable and its area passed to rdi register with the created addresses by [1] and [2].
 4. GET SHELL!!
 
-
-
+<hr>
 # Conclusion
 
-The exploit code can be found in [my github](https://github.com/JinsBurger/CTF/tree/master/2025/DEFCON_Quals/jxl4fun-pwn).  
+The exploit code was uploaded in [my github](https://github.com/JinsBurger/CTF/tree/master/2025/DEFCON_Quals/jxl4fun-pwn).  
 Thanks for reading.
