@@ -174,7 +174,7 @@ To implement the oob pattern, I reserved 2x4 pixels in an each operation. I expl
 2. The `OP15` predictor multiplies its left value by 2 and use it as read index and save it its pixel.
 3. With the `Set` predictor, set its pixel to `0`. It will be used at [5].
 4. With the `Set` predictor, set its pixel with the offset as much as you want to add it to [2]\(OOB read\).
-5. The `OP17` predictor adds `[2](left)+[4](top)-[5](top left)`. To make exploit easily, I set [5] to zero.
+5. The `OP17` predictor adds `[2](left)+[4](top)-[5](top left)`. To make exploit easily, I set [3] to zero.
 6. With the `Set` predictor, set its pixel to Out Of Bound index which you want **write** in the 32bit range.
 7. Finally, The `OP16` predictor runs `((uint16_t*)g_pallet) + [6] = [5];`
 
