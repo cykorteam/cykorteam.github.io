@@ -11,7 +11,7 @@ Written By **[Jinheon Lee](https://x.com/howdays1)**
 Hello! 👋, I'm Jinheon Lee (`howdays`) and I participated [DEFCON33 Quals](https://nautilus.institute/) as HypeBoy. (I failed to obtain the qualifcation for the final 😭, but Cykor did it! 😊)  
 Blog: [https://howdays.blog/](https://howdays.blog/)  
 X: [@howdays1](https://x.com/howdays1)  
-LinkedIn: [https://www.linkedin.com/in/jinheon-lee-4319b2249/](linkedin.com/in/jinheon-lee-4319b2249/)
+LinkedIn: [https://www.linkedin.com/in/jinheon-lee-4319b2249/](https://www.linkedin.com/in/jinheon-lee-4319b2249/)
 
 I'm gonna write down the jxl4fun2 (pwn), which I took the initiative to solve and I was very impressed by.
 <hr>
