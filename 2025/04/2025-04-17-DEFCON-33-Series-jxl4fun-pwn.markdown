@@ -49,7 +49,7 @@ if y > 0
   - W 20
 ```
 The above code generates the below JPEG-XL image.  
-<img src="./assets/2024-04-17-DEFCON-33-Series-jxl4fun-pwn-1.png" width="20%">
+<img src="./assets/2025-04-17-DEFCON-33-Series-jxl4fun-pwn-1.png" width="20%">
 
 These way is called **JXL ART**, with the JXL ART code, the [jxl_from_tree](https://github.com/libjxl/libjxl/blob/main/tools/jxl_from_tree.cc) tool translates the code and generate the JXL-format image file. You can test it at [https://jxl-art.surma.technology/](https://jxl-art.surma.technology/) handily.  
 
@@ -165,7 +165,7 @@ For that, I had to create precise code which let the pattern run repeatly. I wro
 
 
 ### Exploit Plan
-<img src="./assets/2024-04-17-DEFCON-33-Series-jxl4fun-pwn-2.png" width="100%">
+<img src="./assets/2025-04-17-DEFCON-33-Series-jxl4fun-pwn-2.png" width="100%">
 
 **Please read down along with while referring the above picuture.**
 
@@ -183,7 +183,7 @@ To implement the oob pattern, I reserved 2x4 pixels in an each operation. I expl
 However, It is kinda complex to write the patterns with iterating (y,x) coordinates as JXL code by hand.
 To resolve the complexity, What I devised is implementing binary Tree with [y, x] key with JXL data and visiting the node when generating the JXL code.
 
-<img src="./assets/2024-04-17-DEFCON-33-Series-jxl4fun-pwn-3.png" width="100%">
+<img src="./assets/2025-04-17-DEFCON-33-Series-jxl4fun-pwn-3.png" width="100%">
 
 When inserting [y,x] element, if `y` is bigger than current, insert it left side if not right side.  (*In my implementation, almost [y, x] are inserted and the graph always grows linearly. Therefore I didn't consider this kind of situation because Sudden insertion doesn't occur.*)  
 It is very crucial to understand the `if` scope and `else` scope in JXL code. Because the JXL code doesn't support `== (eq)` statement but it only features `>` statemnt, we have to fully imaginate the boundary of pixels. (*The JXL code can't be described "ELSE" word explicitly. It's kinda to hard to get it*)  
