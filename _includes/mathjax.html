@@ -8,8 +8,9 @@
 
           function updateMathState(text, inMath) {
               if (!text) {
-                  return inMath;
+                  return { inMath: inMath, enteredMath: false };
               }
+              var enteredMath = false;
               for (var i = 0; i < text.length; i++) {
                   var ch = text[i];
                   if (ch === "\\\\") {
@@ -21,54 +22,88 @@
                           i += 1;
                       }
                       inMath = !inMath;
+                      if (inMath) {
+                          enteredMath = true;
+                      }
                   }
               }
-              return inMath;
+              return { inMath: inMath, enteredMath: enteredMath };
           }
 
-          function fixMarkdownEmphasisInMath(root) {
-              var inMath = false;
-              var toReplace = [];
-
-              function walk(node) {
-                  if (!node) {
-                      return;
-                  }
-                  if (node.nodeType === Node.ELEMENT_NODE) {
-                      if (node.matches("pre, code, kbd, samp, .katex")) {
-                          return;
-                      }
-                      var tag = node.tagName;
-                      if (tag === "EM" || tag === "I" || tag === "STRONG" || tag === "B") {
-                          if (inMath) {
-                              toReplace.push(node);
+          function markEmphasisOverMath(root) {
+              var walker = document.createTreeWalker(
+                  root,
+                  NodeFilter.SHOW_TEXT,
+                  {
+                      acceptNode: function(node) {
+                          if (!node.nodeValue) {
+                              return NodeFilter.FILTER_REJECT;
                           }
-                          inMath = updateMathState(node.textContent, inMath);
-                          return;
+                          var parent = node.parentElement;
+                          if (!parent) {
+                              return NodeFilter.FILTER_REJECT;
+                          }
+                          if (parent.closest("pre, code, kbd, samp, .katex")) {
+                              return NodeFilter.FILTER_REJECT;
+                          }
+                          return NodeFilter.FILTER_ACCEPT;
                       }
-                      var child = node.firstChild;
-                      while (child) {
-                          var next = child.nextSibling;
-                          walk(child);
-                          child = next;
-                      }
-                      return;
                   }
-                  if (node.nodeType === Node.TEXT_NODE) {
-                      inMath = updateMathState(node.nodeValue, inMath);
+              );
+
+              var inMath = false;
+              var marked = new Set();
+              var nodes = [];
+              while (walker.nextNode()) {
+                  nodes.push(walker.currentNode);
+              }
+
+              for (var i = 0; i < nodes.length; i++) {
+                  var node = nodes[i];
+                  var result = updateMathState(node.nodeValue, inMath);
+                  var hasMath = inMath || result.enteredMath;
+                  inMath = result.inMath;
+                  if (!hasMath) {
+                      continue;
+                  }
+                  var el = node.parentElement;
+                  while (el) {
+                      var tag = el.tagName;
+                      if (tag === "EM" || tag === "I" || tag === "STRONG" || tag === "B") {
+                          marked.add(el);
+                      }
+                      el = el.parentElement;
                   }
               }
 
-              walk(root);
+              var ordered = Array.from(marked);
+              ordered.sort(function(a, b) {
+                  var depthA = 0;
+                  var depthB = 0;
+                  var cur = a;
+                  while (cur) {
+                      depthA += 1;
+                      cur = cur.parentElement;
+                  }
+                  cur = b;
+                  while (cur) {
+                      depthB += 1;
+                      cur = cur.parentElement;
+                  }
+                  return depthB - depthA;
+              });
 
-              for (var i = 0; i < toReplace.length; i++) {
-                  var el = toReplace[i];
+              for (var j = 0; j < ordered.length; j++) {
+                  var el = ordered[j];
+                  if (!el.parentElement) {
+                      continue;
+                  }
                   var marker = (el.tagName === "STRONG" || el.tagName === "B") ? "__" : "_";
                   el.replaceWith(document.createTextNode(marker + el.textContent + marker));
               }
           }
 
-          fixMarkdownEmphasisInMath(mathRoot);
+          markEmphasisOverMath(mathRoot);
 
           renderMathInElement(mathRoot, {
               delimiters: [
