@@ -141,7 +141,7 @@ After applying the Inverse Quantum Fourier Transform $F^{-1}_Q$ to the upper reg
 > \end{aligned}
 > $$
 > 
-> Using the trigonometric identity $|1 - e^{i\theta}| = 2|\sin(\theta/2)|$, this can be written as:
+> Using the trigonometric identity $\left \vert 1 - e^{i\theta}\right \vert = 2\left \vert \sin(\theta/2)\right \vert$, this can be written as:
 > 
 > $$
 > \begin{aligned}
@@ -150,14 +150,14 @@ After applying the Inverse Quantum Fourier Transform $F^{-1}_Q$ to the upper reg
 > \end{aligned}
 > $$
 
-The graph of $y=\left|\dfrac{\sin(\pi Mx)}{\sin(\pi x)}\right|^2$ when $M=5$ is as follows:
+The graph of $y=\left \vert \dfrac{\sin(\pi Mx)}{\sin(\pi x)}\right \vert^2$ when $M=5$ is as follows:
 
 <img src="./assets/2026-01-31-Paper-Review-QUANTUM-FACTORING-2.png" alt="image2" style="zoom:25%;" />
 
 Thus, we can see that the measurement result $c$ is observed with high probability as a multiple of $\dfrac{Q}{r}$ (i.e., $\dfrac{sQ}{r}$). In other words, we can find an approximate value of the period $r$ via $\dfrac{c}{Q} \approx \dfrac{s}{r}$.
 > Using continued fractions, we can find the approximate value $\dfrac{s}{r}$ of $\dfrac{c}{Q}$. At this time, since the range of $Q$ is $N^2 \le Q < 2N^2$, then $r < N \le \sqrt{Q}$.
 > 
-> Therefore, we can find a unique approximate value $\dfrac{s}{r}$ that satisfies $\left| \dfrac{c}{Q} - \dfrac{s}{r} \right| < \dfrac{1}{2r^2}$.
+> Therefore, we can find a unique approximate value $\dfrac{s}{r}$ that satisfies $\left \vert \dfrac{c}{Q} - \dfrac{s}{r} \right \vert < \dfrac{1}{2r^2}$.
 >
 > Among these, we just need to find the $r$ that satisfies $a^{r} \equiv 1 \pmod N$.
 
@@ -185,7 +185,7 @@ $$\delta(x)=\begin{cases}
 0 & x \neq 0
 \end{cases}
 $$
-> 
+
 > Mathematically, it is not strictly a function but is defined as a distribution.
 
 A key property of the Dirac delta function is:
@@ -205,6 +205,7 @@ $$
 In other words, the Dirac delta function represents a point at $x=x_0$ as a function $\delta(x-x_0)$. Since the function value is $0$ for $x \neq x_0$, a set of infinitely many points with period $r$ can be written as:
 
 $$g(x)=\sum_{k=-\infty} \delta(x - x_0 - kr)$$
+
 > 
 $g(x)$ has a period $r$, and the result of the Fourier transform for a function with period $r$ is $0$ unless the frequency is an integer multiple of $\omega = \dfrac{2\pi}{r}$.
 > First, let's show that $g(x)$ has a period $r$.
@@ -236,7 +237,7 @@ $g(x)$ has a period $r$, and the result of the Fourier transform for a function 
 > 
 > Therefore, $F(\omega)(1 - e^{i\omega r}) = 0$. For $F(\omega) \neq 0$, it must be that $e^{i\omega r} = 1$. Since this requires $\omega r = 2n\pi$ ($n \in \mathbb{Z}$), we can see that $F(\omega)$ must be $0$ when $\omega \neq \dfrac{2n\pi}{r}$.
 >
-> This is similar to the context where the probability increases when $c$ is of the form $\dfrac{sQ}{r}$ in the discrete QFT expression $\dfrac{1}{MQ} \cdot \left|\dfrac{\sin(\pi Mrc / Q)}{\sin(\pi rc / Q)}\right|^2$.
+> This is similar to the context where the probability increases when $c$ is of the form $\dfrac{sQ}{r}$ in the discrete QFT expression $\dfrac{1}{MQ} \cdot \left \vert \dfrac{\sin(\pi Mrc / Q)}{\sin(\pi rc / Q)}\right \vert^2$.
 
 ### Reason for using oscillators
 A quantum harmonic oscillator has continuous variables called position $x$ and momentum $p$, and the state space of these variables is infinite-dimensional. Therefore, it is suitable for representing continuous functions like the Dirac delta function.
@@ -294,7 +295,7 @@ Additionally, the Fourier transform used in Shor's algorithm can achieve the sam
 > 
 > $$\therefore \sum_{k=-\infty}^{\infty} e^{ik\alpha} = 2\pi \Delta(\alpha) = 2\pi \sum_{k=-\infty}^{\infty} \delta(\alpha - 2k\pi)$$
 > 
-> Therefore, $\displaystyle\sum_{k=-\infty}^{\infty} e^{-i p kr} = 2\pi \sum_{k=-\infty}^{\infty} \delta(p r - 2k\pi)$. Using the scaling property of the Dirac delta function ($\delta(a x) = \dfrac{1}{|a|} \delta(x)$), then $\delta(p r - 2k\pi) = \dfrac{1}{r} \delta\left(p - \dfrac{2k\pi}{r}\right)$.
+> Therefore, $\displaystyle\sum_{k=-\infty}^{\infty} e^{-i p kr} = 2\pi \sum_{k=-\infty}^{\infty} \delta(p r - 2k\pi)$. Using the scaling property of the Dirac delta function ($\delta(a x) = \dfrac{1}{\vert a\vert} \delta(x)$), then $\delta(p r - 2k\pi) = \dfrac{1}{r} \delta\left(p - \dfrac{2k\pi}{r}\right)$.
 > 
 > Thus, $\displaystyle\sum_{k=-\infty}^{\infty} e^{-i p kr} = \dfrac{2\pi}{r} \displaystyle\sum_{k=-\infty}^{\infty} \delta\left(p - \dfrac{2k\pi}{r}\right)$, and finally $g(p)$ can be written as follows:
 > 
