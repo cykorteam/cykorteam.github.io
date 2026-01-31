@@ -4,13 +4,59 @@
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" crossorigin="anonymous"></script>
   <script>
       document.addEventListener("DOMContentLoaded", function() {
-          renderMathInElement(document.body, {
+          function restoreUnderscoreInDollarMath(container) {
+              var html = container.innerHTML;
+              var out = "";
+              var i = 0;
+              var inMath = false;
+              while (i < html.length) {
+                  var ch = html[i];
+                  if (ch === "\\" && html[i + 1] === "$") {
+                      out += "\\$";
+                      i += 2;
+                      continue;
+                  }
+                  if (ch === "$") {
+                      if (html[i + 1] === "$") {
+                          inMath = !inMath;
+                          out += "$$";
+                          i += 2;
+                          continue;
+                      }
+                      inMath = !inMath;
+                      out += "$";
+                      i += 1;
+                      continue;
+                  }
+                  if (inMath) {
+                      if (html.startsWith("<em>", i)) {
+                          out += "_";
+                          i += 4;
+                          continue;
+                      }
+                      if (html.startsWith("</em>", i)) {
+                          out += "_";
+                          i += 5;
+                          continue;
+                      }
+                  }
+                  out += ch;
+                  i += 1;
+              }
+              container.innerHTML = out;
+          }
+
+          var mathRoot = document.querySelector(".c-article__main") || document.body;
+          restoreUnderscoreInDollarMath(mathRoot);
+
+          renderMathInElement(mathRoot, {
               delimiters: [
                   { left: "$$", right: "$$", display: true },
                   { left: "\\[", right: "\\]", display: true },
                   { left: "\\(", right: "\\)", display: false },
                   { left: "$", right: "$", display: false }
-              ]
+              ],
+              throwOnError: false
           });
       });
   </script>
