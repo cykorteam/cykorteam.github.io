@@ -66,7 +66,7 @@ $$\psi'=F_Q\psi$$
 Also, by the above definition, $F_Q^\dagger \cdot F_Q = I$ and $F_Q^\dagger = F_Q^{-1}$.
 
 >
-> Since $(F_Q)_{k, x} = \dfrac{1}{\sqrt{Q}}e^{2\pi ikx/Q}$ , it follows that $(F_Q)_{k, x}^\dagger = \overline{(F_Q)_{k, x}} = \dfrac{1}{\sqrt{Q}}e^{-2\pi ikx/Q}$.
+> Since $(F_Q)_{k, x} = \dfrac{1}{\sqrt{Q}}e^{2\pi ikx/Q}$ , it follows that $(F_Q)^\dagger_{k, x} = \overline{(F_Q)_{k, x}} = \dfrac{1}{\sqrt{Q}}e^{-2\pi ikx/Q}$.
 >
 > $$
 > \begin{aligned}
@@ -76,9 +76,9 @@ Also, by the above definition, $F_Q^\dagger \cdot F_Q = I$ and $F_Q^\dagger = F_
 > \end{aligned}
 > $$
 >
-> If $x=x\displaystyle'$, then $(F_Q^\dagger \cdot F_Q)_{x, x\displaystyle'}=1$.
+> If $x=x'$, then $(F_Q^\dagger \cdot F_Q)_{x, x'}=1$.
 >
-> If $x\neq x\displaystyle'$, we can derive the following from the expression with $d=x\displaystyle'-x$:
+> If $x\neq x'$, we can derive the following from the expression with $d=x'-x$:
 >
 > $$
 > \begin{aligned}
@@ -108,7 +108,7 @@ That is, the upper register becomes $\vert \Psi \rangle = \dfrac{1}{\sqrt{M}}\di
 
 After applying the Inverse Quantum Fourier Transform $F^{-1}_Q$ to the upper register, the probability that the observed value is $c$ is $P(c) = \dfrac{1}{MQ} \cdot \left \vert \dfrac{\sin(\pi Mrc / Q)}{\sin(\pi rc / Q)}\right \vert^2$.
 
-> The state vector $\vert \Psi\displaystyle' \rangle$ after applying the Inverse Quantum Fourier Transform to the upper register is as follows:
+> The state vector $\vert \Psi' \rangle$ after applying the Inverse Quantum Fourier Transform to the upper register is as follows:
 > 
 > $$
 > \begin{aligned}
@@ -180,7 +180,7 @@ In Shor's algorithm, as the size of $N$ grows, more qubits are required. This pa
 The Fourier transform is inherently a continuous concept, and the paper questions implementing it in the discrete space of qubits.
 
 ### Basic Mathematical Structure
-In Shor's algorithm, the fact that a certain value ($x_0$) repeats every period $r$ is expressed in the form $x \equiv x_0 \pmod r$. On the other hand, this paper expresses the set of points $\\{x_0 + kr \\mid k \\in \\mathbb{Z}\\}$ as a function to apply the Fourier transform. For this, the Dirac delta function $\delta(x)$ was used. The Dirac delta function is defined as follows:
+In Shor's algorithm, the fact that a certain value ($x_0$) repeats every period $r$ is expressed in the form $x \equiv x_0 \pmod r$. On the other hand, this paper expresses the set of points $\\{x_0 + kr \mid k \in \mathbb{Z} \\}$ as a function to apply the Fourier transform. For this, the Dirac delta function $\delta(x)$ was used. The Dirac delta function is defined as follows:
 
 $$\int^{\infty}_{-\infty} \delta(x)f(x) dx = f(0)$$
 
