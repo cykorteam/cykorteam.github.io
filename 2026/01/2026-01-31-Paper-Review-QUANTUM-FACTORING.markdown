@@ -33,6 +33,7 @@ If you find an $a$ such that $\gcd(a, N) \neq 1$, then $N$ is factored into $a$ 
 After applying the Hadamard gate $H$ to the upper register, it becomes a uniform superposition state of $\dfrac{1}{\sqrt{Q}}\displaystyle\sum^{Q-1}_{x=0}\vert x \rangle$. ($Q=2^{2n}$)
 
 The $n$-qubits in the lower register have an initial state of $\vert 1 \rangle$, and $U_{a^{2^k}}$ is applied. $U_{a^{2^k}}$ is an operation that performs $\vert x \rangle \vert y \rangle \mapsto \vert x \rangle \vert y \cdot a^{2^k} \bmod N \rangle$. (While generally $U_f: \vert x \rangle \vert z \rangle \mapsto \vert x \rangle \vert z \oplus f(x) \rangle$, in the Shor circuit it denotes $U_a: \vert x \rangle \vert y \rangle \mapsto \vert x \rangle \vert y \cdot a^x \bmod N \rangle$.)
+
 > $U_a$ is a unitary operation because the modular multiplication operation is a one-to-one correspondence defined within the group $(\mathbb{Z}/N\mathbb{Z})^\times$.
 
 Each bit of the upper register becomes a control qubit, ultimately calculating $\vert x \rangle \vert 1 \rangle \mapsto \vert x \rangle \vert a^x \bmod N \rangle$.
@@ -63,6 +64,7 @@ For any state vector $\psi$, the QFT acts as a linear transformation:
 $$\psi'=F_Q\psi$$
 
 Also, by the above definition, $F_Q^\dagger \cdot F_Q = I$ and $F_Q^\dagger = F_Q^{-1}$.
+
 >
 > Since $(F_Q)_{k, x} = \dfrac{1}{\sqrt{Q}}e^{2\pi ikx/Q}$ , it follows that $(F_Q)_{k, x}^\dagger = \overline{(F_Q)_{k, x}} = \dfrac{1}{\sqrt{Q}}e^{-2\pi ikx/Q}$.
 >
@@ -105,6 +107,7 @@ Therefore, the possible values for $x$ after observation are of the form $x = x_
 That is, the upper register becomes $\vert \Psi \rangle = \dfrac{1}{\sqrt{M}}\displaystyle\sum_{k=0}^{M-1} \vert x_0 + kr \rangle$.
 
 After applying the Inverse Quantum Fourier Transform $F^{-1}_Q$ to the upper register, the probability that the observed value is $c$ is $P(c) = \dfrac{1}{MQ} \cdot \left|\dfrac{\sin(\pi Mrc / Q)}{\sin(\pi rc / Q)}\right|^2$.
+
 > The state vector $\vert \Psi' \rangle$ after applying the Inverse Quantum Fourier Transform to the upper register is as follows:
 > 
 > $$
@@ -155,6 +158,7 @@ The graph of $y=\left \vert \dfrac{\sin(\pi Mx)}{\sin(\pi x)}\right \vert^2$ whe
 <img src="./assets/2026-01-31-Paper-Review-QUANTUM-FACTORING-2.png" alt="image2" style="zoom:25%;" />
 
 Thus, we can see that the measurement result $c$ is observed with high probability as a multiple of $\dfrac{Q}{r}$ (i.e., $\dfrac{sQ}{r}$). In other words, we can find an approximate value of the period $r$ via $\dfrac{c}{Q} \approx \dfrac{s}{r}$.
+
 > Using continued fractions, we can find the approximate value $\dfrac{s}{r}$ of $\dfrac{c}{Q}$. At this time, since the range of $Q$ is $N^2 \le Q < 2N^2$, then $r < N \le \sqrt{Q}$.
 > 
 > Therefore, we can find a unique approximate value $\dfrac{s}{r}$ that satisfies $\left \vert \dfrac{c}{Q} - \dfrac{s}{r} \right \vert < \dfrac{1}{2r^2}$.
@@ -208,6 +212,7 @@ $$g(x)=\sum_{k=-\infty} \delta(x - x_0 - kr)$$
 
 > 
 $g(x)$ has a period $r$, and the result of the Fourier transform for a function with period $r$ is $0$ unless the frequency is an integer multiple of $\omega = \dfrac{2\pi}{r}$.
+
 > First, let's show that $g(x)$ has a period $r$.
 > 
 > $$\begin{aligned}
@@ -243,6 +248,7 @@ $g(x)$ has a period $r$, and the result of the Fourier transform for a function 
 A quantum harmonic oscillator has continuous variables called position $x$ and momentum $p$, and the state space of these variables is infinite-dimensional. Therefore, it is suitable for representing continuous functions like the Dirac delta function.
 
 Additionally, the Fourier transform used in Shor's algorithm can achieve the same effect by measuring the momentum $p$ of the oscillator.
+
 > The position $x$ and momentum $p$ of the oscillator have the following relationship:
 >
 > $$\langle x\vert p \rangle = \frac{1}{\sqrt{2\pi}} e^{i p x}$$
@@ -308,6 +314,7 @@ Additionally, the Fourier transform used in Shor's algorithm can achieve the sam
 
 In this paper, the three oscillators play the following roles:
 1. First oscillator: Stores variable $x$ as an input register
+
     > Similar to how the upper register in Shor's algorithm encodes the $x$ value. Although $x$ is a continuous variable, it acts like a bit string, conceptually performing operations like $x \mapsto \lfloor x \rfloor \bmod 2$, $x \mapsto \lfloor x / 2 \rfloor$.
     > 
     > To make this possible, a GKP state (Gottesman-Kitaev-Preskill state) is used to reliably store the continuous variable $x$. The basic lattice unit of GKP is $\sqrt{\pi}$, and the GKP state is expressed as follows:
@@ -320,6 +327,7 @@ In this paper, the three oscillators play the following roles:
     > 
     > $$\psi(x)=\sum_{k\in\mathbb{Z}}e^{-\frac{(x-kr)^2}{2\sigma^2}}$$
 2. Second oscillator: Stores $f_{a,N,m}(x)$ as a work register
+
     > $f_{a,N,m}(x)$ is a pseudo-modular power function defined to have the same periodic structure as $f(x)=a^x \bmod N$ in Shor's algorithm, playing a role similar to the lower register.
     >
     > At this time, the unitary $U_{a,N,m}$ is implemented by combining the following two operations:
@@ -340,6 +348,7 @@ In this paper, the three oscillators play the following roles:
     > 
     > In actual implementation, modular multiplication is performed by combining a SUM gate (CV version of CNOT) and a Squeezing gate. In particular, a Conditional Displacement operation is used to perform $a^{2^j} \pmod N$ according to each bit of $x$, which is the core technology of this paper that approximates nonlinear $f(x)$ as a combination of linear gates in CV systems.
 3. Third oscillator: Used as an auxiliary register for LSB extraction and bit shifting
+
     > The third oscillator is used as an auxiliary register needed in the process of extracting the LSB from the continuous variable $x$ encoded in the first oscillator and responding to bit shifts.
 
 ### Reason for using a qubit
@@ -348,6 +357,7 @@ While continuous variable oscillators alone can generate the periodic structure 
 Assuming the phase corresponding to the period we want to find is $\phi = 0.\phi_1\phi_2\phi_3\dots\phi_m$ (binary), Shor's algorithm used $m$ qubits to estimate $\phi_1, \phi_2, \cdots, \phi_m$ all at once, whereas this paper uses only a single qubit to estimate from $\phi_m$ to $\phi_1$ sequentially. The reason for estimating from the lower bits is that if measured from the upper bits, interference with the lower bits occurs, making accurate estimation difficult. Therefore, estimating from the lower bits allows for accurate estimation without interference from the upper bits.
 
 When the qubit is placed in the $\vert + \rangle = \dfrac{\vert 0 \rangle + \vert 1 \rangle}{\sqrt{2}}$ state and a control operation is performed, a Phase Kickback phenomenon occurs where the phase of the target state (Oscillator) is transferred to the control qubit, and a value of $0$ or $1$ is obtained through measurement.
+
 > Before explaining, let's show that the eigenvalue of $U$ is $e^{2\pi i \phi}$.
 >
 > The unitary operator $U$ is defined as $U \vert y \rangle = \vert ay \bmod N \rangle$. Since applying the $U$ operation $r$ times to $\vert 1 \rangle$ eventually returns it to $\vert 1 \rangle$, $U^r = I$. Therefore, the eigenvalue $\lambda$ of $U$ must satisfy $\lambda^r = 1$, can be written in the form $\lambda = e^{2\pi i \phi}$ ($\phi = \dfrac{s}{r}, s \in \{0, 1, \cdots, r-1\}$), and $U\vert \psi \rangle = e^{2\pi i \phi} \vert \psi \rangle$.
@@ -363,6 +373,7 @@ When the qubit is placed in the $\vert + \rangle = \dfrac{\vert 0 \rangle + \ver
 > Thus, the period $\phi$ is included in the phase of the control qubit (Phase Kickback).
 
 If the result of measuring the $m$-th bit ($\phi_m$) is $1$, the phase causes interference when measuring the next bit ($\phi_{m-1}$), requiring correction.
+
 > Expressing the phase as $\phi = \dfrac{\phi_1}{2^1} + \dfrac{\phi_2}{2^2} + \cdots + \dfrac{\phi_m}{2^m} \quad (\phi_j \in \{0, 1\})$, the phase kicked back when performing the $U^{2^{k-1}}$ operation in the $k$-th step is as follows:
 > 
 > $$\begin{aligned}
@@ -374,6 +385,7 @@ If the result of measuring the $m$-th bit ($\phi_m$) is $1$, the phase causes in
 > When measuring the current bit $\phi_k$, the already measured lower bits ($\phi_{k+1}$, $\phi_{k+2}$, $\cdots$, $\phi_m$) cause interference.
 
 At this time, the phase is corrected using an $R_z(-\theta)$ gate.
+
 > Interference must be removed using the already known lower bits $\phi_{k+1}$, $\phi_{k+2}$, $\cdots$, $\phi_m$, and the applied rotation angle $\theta_k$ is as follows:
 > 
 > $$\begin{aligned}\theta_k &= 2\pi \left(0.0\phi_{k+1}\phi_{k+2}\cdots\phi_m\right)\\
