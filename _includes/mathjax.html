@@ -8,57 +8,30 @@
           var targets = mathRoot.querySelectorAll("p, li, blockquote, td, th");
           for (var t = 0; t < targets.length; t++) {
               var el = targets[t];
-              if (!el || !el.textContent || el.textContent.indexOf("$") === -1) {
+              if (!el || !el.innerHTML || el.innerHTML.indexOf("$") === -1) {
                   continue;
               }
               if (el.closest("pre, code, kbd, samp")) {
                   continue;
               }
-              var inMath = false;
-              var walker = document.createTreeWalker(
-                  el,
-                  NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT,
-                  {
-                      acceptNode: function(node) {
-                          if (node.nodeType === Node.ELEMENT_NODE) {
-                              var tag = node.tagName;
-                              if (tag === "PRE" || tag === "CODE" || tag === "KBD" || tag === "SAMP") {
-                                  return NodeFilter.FILTER_REJECT;
-                              }
-                          }
-                          return NodeFilter.FILTER_ACCEPT;
-                      }
-                  }
-              );
-              var nodes = [];
-              while (walker.nextNode()) {
-                  nodes.push(walker.currentNode);
+              // Only touch inline $...$ spans inside this element.
+              if (el.innerHTML.indexOf("<em>") === -1) {
+                  continue;
               }
-              for (var i = 0; i < nodes.length; i++) {
-                  var node = nodes[i];
-                  if (node.nodeType === Node.TEXT_NODE) {
-                      var txt = node.nodeValue || "";
-                      for (var j = 0; j < txt.length; j++) {
-                          var ch = txt[j];
-                          if (ch === "\\" && txt[j + 1] === "$") {
-                              j += 1;
-                              continue;
-                          }
-                          if (ch === "$") {
-                              if (txt[j + 1] === "$") {
-                                  inMath = !inMath;
-                                  j += 1;
-                                  continue;
-                              }
-                              inMath = !inMath;
-                          }
-                      }
-                  } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "EM" && inMath) {
-                      var innerText = node.textContent || "";
-                      var sub = innerText[0] === "{" ? "_" + innerText : "_{" + innerText + "}";
-                      node.replaceWith(document.createTextNode(sub));
+              var html = el.innerHTML;
+              html = html.replace(/\$(?!\$)([\s\S]*?)\$(?!\$)/g, function(m, inner) {
+                  if (inner.indexOf("<em>") === -1) {
+                      return m;
                   }
-              }
+                  var fixed = inner.replace(/<em>([\s\S]*?)<\/em>/g, function(_m, emText) {
+                      if (emText[0] === "{") {
+                          return "_" + emText;
+                      }
+                      return "_{" + emText + "}";
+                  });
+                  return "$" + fixed + "$";
+              });
+              el.innerHTML = html;
           }
 
           renderMathInElement(mathRoot, {
