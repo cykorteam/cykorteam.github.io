@@ -106,7 +106,7 @@ Therefore, the possible values for $x$ after observation are of the form $x = x_
 
 That is, the upper register becomes $\vert \Psi \rangle = \dfrac{1}{\sqrt{M}}\displaystyle\sum_{k=0}^{M-1} \vert x_0 + kr \rangle$.
 
-After applying the Inverse Quantum Fourier Transform $F^{-1}_Q$ to the upper register, the probability that the observed value is $c$ is $P(c) = \dfrac{1}{MQ} \cdot \left|\dfrac{\sin(\pi Mrc / Q)}{\sin(\pi rc / Q)}\right|^2$.
+After applying the Inverse Quantum Fourier Transform $F^{-1}_Q$ to the upper register, the probability that the observed value is $c$ is $P(c) = \dfrac{1}{MQ} \cdot \left \vert \dfrac{\sin(\pi Mrc / Q)}{\sin(\pi rc / Q)}\right \vert^2$.
 
 > The state vector $\vert \Psi' \rangle$ after applying the Inverse Quantum Fourier Transform to the upper register is as follows:
 > 
