@@ -76,9 +76,9 @@ Also, by the above definition, $F_Q^\dagger \cdot F_Q = I$ and $F_Q^\dagger = F_
 > \end{aligned}
 > $$
 >
-> If $x=x'$, then $(F_Q^\dagger \cdot F_Q)_{x, x'}=1$.
+> If $x=x\displaystyle'$, then $(F_Q^\dagger \cdot F_Q)_{x, x\displaystyle'}=1$.
 >
-> If $x\neq x'$, we can derive the following from the expression with $d=x'-x$:
+> If $x\neq x\displaystyle'$, we can derive the following from the expression with $d=x\displaystyle'-x$:
 >
 > $$
 > \begin{aligned}
@@ -108,7 +108,7 @@ That is, the upper register becomes $\vert \Psi \rangle = \dfrac{1}{\sqrt{M}}\di
 
 After applying the Inverse Quantum Fourier Transform $F^{-1}_Q$ to the upper register, the probability that the observed value is $c$ is $P(c) = \dfrac{1}{MQ} \cdot \left \vert \dfrac{\sin(\pi Mrc / Q)}{\sin(\pi rc / Q)}\right \vert^2$.
 
-> The state vector $\vert \Psi' \rangle$ after applying the Inverse Quantum Fourier Transform to the upper register is as follows:
+> The state vector $\vert \Psi\displaystyle' \rangle$ after applying the Inverse Quantum Fourier Transform to the upper register is as follows:
 > 
 > $$
 > \begin{aligned}
@@ -180,7 +180,7 @@ In Shor's algorithm, as the size of $N$ grows, more qubits are required. This pa
 The Fourier transform is inherently a continuous concept, and the paper questions implementing it in the discrete space of qubits.
 
 ### Basic Mathematical Structure
-In Shor's algorithm, the fact that a certain value ($x_0$) repeats every period $r$ is expressed in the form $x \equiv x_0 \pmod r$. On the other hand, this paper expresses the set of points $\{x_0 + kr \vert k \in \mathbb{Z} \}$ as a function to apply the Fourier transform. For this, the Dirac delta function $\delta(x)$ was used. The Dirac delta function is defined as follows:
+In Shor's algorithm, the fact that a certain value ($x_0$) repeats every period $r$ is expressed in the form $x \equiv x_0 \pmod r$. On the other hand, this paper expresses the set of points $\\{x_0 + kr \\mid k \\in \\mathbb{Z}\\}$ as a function to apply the Fourier transform. For this, the Dirac delta function $\delta(x)$ was used. The Dirac delta function is defined as follows:
 
 $$\int^{\infty}_{-\infty} \delta(x)f(x) dx = f(0)$$
 
@@ -313,6 +313,7 @@ Additionally, the Fourier transform used in Shor's algorithm can achieve the sam
 > Therefore, the structure of the position space having period $r$ appears as an integer multiple of the frequency $\omega = \dfrac{2\pi}{r}$ in momentum space, and the period $r$ can be extracted by measuring momentum.
 
 In this paper, the three oscillators play the following roles:
+
 1. First oscillator: Stores variable $x$ as an input register
 
     > Similar to how the upper register in Shor's algorithm encodes the $x$ value. Although $x$ is a continuous variable, it acts like a bit string, conceptually performing operations like $x \mapsto \lfloor x \rfloor \bmod 2$, $x \mapsto \lfloor x / 2 \rfloor$.
@@ -326,6 +327,7 @@ In this paper, the three oscillators play the following roles:
     > However, since infinite momentum variance is impossible in real physical systems, an approximate GKP state is used to maintain a periodic lattice structure.
     > 
     > $$\psi(x)=\sum_{k\in\mathbb{Z}}e^{-\frac{(x-kr)^2}{2\sigma^2}}$$
+
 2. Second oscillator: Stores $f_{a,N,m}(x)$ as a work register
 
     > $f_{a,N,m}(x)$ is a pseudo-modular power function defined to have the same periodic structure as $f(x)=a^x \bmod N$ in Shor's algorithm, playing a role similar to the lower register.
@@ -347,6 +349,7 @@ In this paper, the three oscillators play the following roles:
     > That is, it can be accumulated in the work register only by combining scale changes and shift operations.
     > 
     > In actual implementation, modular multiplication is performed by combining a SUM gate (CV version of CNOT) and a Squeezing gate. In particular, a Conditional Displacement operation is used to perform $a^{2^j} \pmod N$ according to each bit of $x$, which is the core technology of this paper that approximates nonlinear $f(x)$ as a combination of linear gates in CV systems.
+
 3. Third oscillator: Used as an auxiliary register for LSB extraction and bit shifting
 
     > The third oscillator is used as an auxiliary register needed in the process of extracting the LSB from the continuous variable $x$ encoded in the first oscillator and responding to bit shifts.
