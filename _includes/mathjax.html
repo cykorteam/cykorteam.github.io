@@ -5,34 +5,70 @@
   <script>
       document.addEventListener("DOMContentLoaded", function() {
           var mathRoot = document.querySelector(".c-article__main") || document.body;
-          var targets = mathRoot.querySelectorAll("p, li, blockquote, td, th");
-          for (var t = 0; t < targets.length; t++) {
-              var el = targets[t];
-              if (!el || !el.innerHTML || el.innerHTML.indexOf("$") === -1) {
-                  continue;
+
+          function updateMathState(text, inMath) {
+              if (!text) {
+                  return inMath;
               }
-              if (el.closest("pre, code, kbd, samp")) {
-                  continue;
-              }
-              // Only touch inline $...$ spans inside this element.
-              if (el.innerHTML.indexOf("<em>") === -1) {
-                  continue;
-              }
-              var html = el.innerHTML;
-              html = html.replace(/\$(?!\$)([\s\S]*?)\$(?!\$)/g, function(m, inner) {
-                  if (inner.indexOf("<em>") === -1) {
-                      return m;
+              for (var i = 0; i < text.length; i++) {
+                  var ch = text[i];
+                  if (ch === "\\\\") {
+                      i += 1;
+                      continue;
                   }
-                  var fixed = inner.replace(/<em>([\s\S]*?)<\/em>/g, function(_m, emText) {
-                      if (emText[0] === "{") {
-                          return "_" + emText;
+                  if (ch === "$") {
+                      if (i + 1 < text.length && text[i + 1] === "$") {
+                          i += 1;
                       }
-                      return "_{" + emText + "}";
-                  });
-                  return "$" + fixed + "$";
-              });
-              el.innerHTML = html;
+                      inMath = !inMath;
+                  }
+              }
+              return inMath;
           }
+
+          function fixMarkdownEmphasisInMath(root) {
+              var inMath = false;
+              var toReplace = [];
+
+              function walk(node) {
+                  if (!node) {
+                      return;
+                  }
+                  if (node.nodeType === Node.ELEMENT_NODE) {
+                      if (node.matches("pre, code, kbd, samp, .katex")) {
+                          return;
+                      }
+                      var tag = node.tagName;
+                      if (tag === "EM" || tag === "I" || tag === "STRONG" || tag === "B") {
+                          if (inMath) {
+                              toReplace.push(node);
+                          }
+                          inMath = updateMathState(node.textContent, inMath);
+                          return;
+                      }
+                      var child = node.firstChild;
+                      while (child) {
+                          var next = child.nextSibling;
+                          walk(child);
+                          child = next;
+                      }
+                      return;
+                  }
+                  if (node.nodeType === Node.TEXT_NODE) {
+                      inMath = updateMathState(node.nodeValue, inMath);
+                  }
+              }
+
+              walk(root);
+
+              for (var i = 0; i < toReplace.length; i++) {
+                  var el = toReplace[i];
+                  var marker = (el.tagName === "STRONG" || el.tagName === "B") ? "__" : "_";
+                  el.replaceWith(document.createTextNode(marker + el.textContent + marker));
+              }
+          }
+
+          fixMarkdownEmphasisInMath(mathRoot);
 
           renderMathInElement(mathRoot, {
               delimiters: [

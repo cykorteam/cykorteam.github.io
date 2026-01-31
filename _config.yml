@@ -17,6 +17,8 @@ markdown: kramdown
 kramdown:
   input: kramdown
   math_engine: katex
+  emphasis: "*"
+  strong: "**"
 permalink: /:year/:month/:title
 sass:
     style: compressed
