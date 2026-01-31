@@ -37,6 +37,7 @@ The $n$-qubits in the lower register have an initial state of $\vert 1 \rangle$,
 
 Each bit of the upper register becomes a control qubit, ultimately calculating $\vert x \rangle \vert 1 \rangle \mapsto \vert x \rangle \vert a^x \bmod N \rangle$.
 Therefore, the combined state vector of the two registers is as follows:
+
 $$
 \vert \Psi \rangle = \frac{1}{\sqrt{Q}}\displaystyle\sum^{Q-1}_{x=0}\vert x \rangle \vert a^x \bmod N \rangle
 $$
@@ -58,6 +59,7 @@ F_Q =
 $$
 
 For any state vector $\psi$, the QFT acts as a linear transformation:
+
 $$\psi'=F_Q\psi$$
 
 Also, by the above definition, $F_Q^\dagger \cdot F_Q = I$ and $F_Q^\dagger = F_Q^{-1}$.
@@ -90,6 +92,7 @@ Also, by the above definition, $F_Q^\dagger \cdot F_Q = I$ and $F_Q^\dagger = F_
 As observed earlier, the observation before applying the Inverse Quantum Fourier Transform is $\vert \Psi \rangle = \dfrac{1}{\sqrt{Q}}\displaystyle\sum^{Q-1}_{x=0}\vert x \rangle \vert f(x) \rangle$, where the period of $f(x)=a^x \bmod N$ is $r$.
 
 Let the observed value of the lower register be $y = a^{x_0} \bmod N$. In this case, $\vert x \rangle \vert f(x) \rangle$ is mapped as follows:
+
 $$
 \vert x \rangle \vert f(x) \rangle \mapsto \begin{cases}
 \vert x \rangle \vert y \rangle & \text{if } f(x) = y\\
@@ -103,6 +106,7 @@ That is, the upper register becomes $\vert \Psi \rangle = \dfrac{1}{\sqrt{M}}\di
 
 After applying the Inverse Quantum Fourier Transform $F^{-1}_Q$ to the upper register, the probability that the observed value is $c$ is $P(c) = \dfrac{1}{MQ} \cdot \left|\dfrac{\sin(\pi Mrc / Q)}{\sin(\pi rc / Q)}\right|^2$.
 > The state vector $\vert \Psi' \rangle$ after applying the Inverse Quantum Fourier Transform to the upper register is as follows:
+> 
 > $$
 > \begin{aligned}
 > \vert \Psi' \rangle &= F^{-1}_Q \vert \Psi \rangle\\
@@ -114,6 +118,7 @@ After applying the Inverse Quantum Fourier Transform $F^{-1}_Q$ to the upper reg
 > $$
 >
 > The inner sum in the above equation can be simplified to $e^{-2\pi i x_0 x / Q} \displaystyle\sum^{M-1}_{k=0} \left(e^{-2\pi i x r / Q}\right)^k$, which can be calculated as the sum of a geometric series.
+> 
 > $$
 > \begin{aligned}
 > \sum_{k=0}^{M-1} \left(e^{-2\pi i x r / Q}\right)^k &= \frac{1 - \left(e^{-2\pi i x r / Q}\right)^M}{1 - e^{-2\pi i x r / Q}}\\
@@ -127,6 +132,7 @@ After applying the Inverse Quantum Fourier Transform $F^{-1}_Q$ to the upper reg
 > $$
 >
 > The probability that the observed value of the upper register is $c$ is:
+> 
 > $$
 > \begin{aligned}
 > P(c) &= \left| \langle c | \Psi' \rangle \right|^2\\
@@ -136,6 +142,7 @@ After applying the Inverse Quantum Fourier Transform $F^{-1}_Q$ to the upper reg
 > $$
 > 
 > Using the trigonometric identity $|1 - e^{i\theta}| = 2|\sin(\theta/2)|$, this can be written as:
+> 
 > $$
 > \begin{aligned}
 > P(c) &= \frac{1}{MQ} \cdot \left| \frac{2\sin(\pi Mrc/ Q)}{2\sin(\pi rc / Q)} \right|^2\\
@@ -178,12 +185,15 @@ $$\delta(x)=\begin{cases}
 0 & x \neq 0
 \end{cases}
 $$
+> 
 > Mathematically, it is not strictly a function but is defined as a distribution.
 
 A key property of the Dirac delta function is:
+
 $$
 \int^{\infty}_{-\infty} f(x) \delta(x-a) dx = f(a)
 $$
+
 > Substituting $y = x-x_0$:
 > 
 > $$\int^{\infty}_{-\infty} f(x) \delta(x-x_0) dx = \int^{\infty}_{-\infty} f(y+x_0) \delta(y) dy$$
@@ -193,27 +203,37 @@ $$
 > $$\begin{aligned}\int^{\infty}_{-\infty} f(y+x_0) \delta(y) &= \int^{\infty}_{-\infty} g(y) \delta(y) dy\\ &= g(0) = f(x_0)\end{aligned}$$
 
 In other words, the Dirac delta function represents a point at $x=x_0$ as a function $\delta(x-x_0)$. Since the function value is $0$ for $x \neq x_0$, a set of infinitely many points with period $r$ can be written as:
+
 $$g(x)=\sum_{k=-\infty} \delta(x - x_0 - kr)$$
+> 
 $g(x)$ has a period $r$, and the result of the Fourier transform for a function with period $r$ is $0$ unless the frequency is an integer multiple of $\omega = \dfrac{2\pi}{r}$.
 > First, let's show that $g(x)$ has a period $r$.
+> 
 > $$\begin{aligned}
 > g(x+r) &= \sum_{k=-\infty}^{\infty} \delta(x + r - x_0 - kr)\\
 > &= \sum_{k=-\infty}^{\infty} \delta(x - x_0 - (k-1)r)\\
 > &= \sum_{j=-\infty}^{\infty} \delta(x - x_0 - jr)\\
 > &= g(x)
 > \end{aligned}$$
+> 
 > Next, let's show that the spectrum of the Fourier transform of a function with period $r$ concentrates at integer multiples of the frequency $\omega = \dfrac{2\pi}{r}$.
 > 
 > The Fourier transform measures how much a complex wave $e^{i\omega x}$ with frequency $\omega$ is contained within a given function $f(x)$, and the formula representing this is:
+> 
 > $$F(\omega) = \int^{\infty}_{-\infty} f(x) e^{-i\omega x} dx$$
+> 
 > To substitute periodicity into the Fourier transform, substituting $f(x)=f(x+r)$ into the definition:
+> 
 > $$F(\omega) = \int^{\infty}_{-\infty} f(x+r) e^{-i\omega x} dx$$
+> 
 > Substituting $x+r=y$:
+> 
 > $$\begin{aligned}
 > F(\omega) &= \int^{\infty}_{-\infty} f(y) e^{-i\omega (y-r)} dy\\
 > &= e^{i\omega r} \int^{\infty}_{-\infty} f(y) e^{-i\omega y} dy\\
 > &= e^{i\omega r} F(\omega)
 > \end{aligned}$$
+> 
 > Therefore, $F(\omega)(1 - e^{i\omega r}) = 0$. For $F(\omega) \neq 0$, it must be that $e^{i\omega r} = 1$. Since this requires $\omega r = 2n\pi$ ($n \in \mathbb{Z}$), we can see that $F(\omega)$ must be $0$ when $\omega \neq \dfrac{2n\pi}{r}$.
 >
 > This is similar to the context where the probability increases when $c$ is of the form $\dfrac{sQ}{r}$ in the discrete QFT expression $\dfrac{1}{MQ} \cdot \left|\dfrac{\sin(\pi Mrc / Q)}{\sin(\pi rc / Q)}\right|^2$.
@@ -225,12 +245,15 @@ Additionally, the Fourier transform used in Shor's algorithm can achieve the sam
 > The position $x$ and momentum $p$ of the oscillator have the following relationship:
 >
 > $$\langle x\vert p \rangle = \frac{1}{\sqrt{2\pi}} e^{i p x}$$
+> 
 > For any state vector $\vert \psi \rangle$, the position representation $\psi(x) $ is defined as $\langle x \vert \psi \rangle$, and the momentum representation $\psi(p)$ is defined as $\langle p \vert \psi \rangle$.
 > 
 > Thus, the state vector $\vert \psi \rangle$ can be written as:
+> 
 > $$\vert \psi \rangle = \int \psi(x) \vert x \rangle dx = \int \psi(p) \vert p \rangle dp$$
 >
 > Also, $\psi(p)$ can be written as:
+> 
 > $$\begin{aligned}
 > \psi(p) &= \langle p \vert \psi \rangle\\
 > &= \int \langle p \vert x \rangle \langle x \vert \psi \rangle dx\\
@@ -239,36 +262,47 @@ Additionally, the Fourier transform used in Shor's algorithm can achieve the sam
 > \end{aligned}$$
 >
 > Now, let's find the momentum representation $g(p)$ for the function $g(x)=\displaystyle\sum_{k=-\infty} \delta(x - x_0 - kr)$ defined earlier.
+> 
 > $$\begin{aligned}
 > g(p) &= \frac{1}{\sqrt{2\pi}} \int e^{-i p x} \left( \sum_{k=-\infty}^{\infty} \delta(x - x_0 - kr) \right) dx\\
 > &= \frac{1}{\sqrt{2\pi}} \sum_{k=-\infty}^{\infty} \int  \delta(x - x_0 - kr) e^{-i p x} dx\\
 > &= \frac{1}{\sqrt{2\pi}} \sum_{k=-\infty}^{\infty} e^{-i p (x_0 + kr)} \quad \left(\because \int \delta(x-a) f(x) dx = f(a)\right)\\
 > &= \frac{e^{-i p x_0}}{\sqrt{2\pi}} \sum_{k=-\infty}^{\infty} e^{-i p kr}
 > \end{aligned}$$
+> 
 > $\displaystyle\sum_{k=-\infty}^{\infty} e^{-i p kr}$ can be expressed as $\displaystyle\sum_{k=-\infty}^{\infty}\delta(\alpha - 2k\pi)$ using the Dirac delta function. The derivation process is as follows:
 >
 > Let $\displaystyle\sum_{k=-\infty}^{\infty}\delta(\alpha - 2k\pi) = \Delta(\alpha)$. Since $\Delta(\alpha)$ has a period of $2\pi$, expressing $c_k$ according to the definition of a periodic distribution:
+> 
 > $$c_k = \frac{1}{2\pi}\int^{\pi}_{-\pi}\Delta(\alpha)e^{-ik\alpha} d\alpha$$
+> 
 > In this case, since only $k=0$ contributes to the value of $\Delta(\alpha)$, then $\Delta(\alpha) = \delta(\alpha)$. Simplifying the expression:
+> 
 > $$\begin{aligned}
 > c_k &= \frac{1}{2\pi}\int^{\pi}_{-\pi}\delta(\alpha)e^{-ik\alpha} d\alpha\\
 > &= \frac{1}{2\pi} \cdot e^{-ik \cdot 0} \quad \left(\because \int\delta(x)f(x) dx = f(0)\right)\\
 > &= \frac{1}{2\pi}
 > \end{aligned}$$
+> 
 > Since $f(x)$ can be expressed as a complex Fourier series $f(x) = \displaystyle\sum_{k=-\infty}^{\infty} c_k e^{ikx}$, $\Delta(\alpha)$ can be written as:
+> 
 > $$\begin{aligned}
 > \Delta(\alpha) &= \sum_{k=-\infty}^{\infty} c_k e^{ik\alpha}\\
 > &= \sum_{k=-\infty}^{\infty} \frac{1}{2\pi} e^{ik\alpha}\\
 > &= \frac{1}{2\pi} \sum_{k=-\infty}^{\infty} e^{ik\alpha}
 > \end{aligned}$$
+> 
 > $$\therefore \sum_{k=-\infty}^{\infty} e^{ik\alpha} = 2\pi \Delta(\alpha) = 2\pi \sum_{k=-\infty}^{\infty} \delta(\alpha - 2k\pi)$$
+> 
 > Therefore, $\displaystyle\sum_{k=-\infty}^{\infty} e^{-i p kr} = 2\pi \sum_{k=-\infty}^{\infty} \delta(p r - 2k\pi)$. Using the scaling property of the Dirac delta function ($\delta(a x) = \dfrac{1}{|a|} \delta(x)$), then $\delta(p r - 2k\pi) = \dfrac{1}{r} \delta\left(p - \dfrac{2k\pi}{r}\right)$.
 > 
 > Thus, $\displaystyle\sum_{k=-\infty}^{\infty} e^{-i p kr} = \dfrac{2\pi}{r} \displaystyle\sum_{k=-\infty}^{\infty} \delta\left(p - \dfrac{2k\pi}{r}\right)$, and finally $g(p)$ can be written as follows:
+> 
 > $$\begin{aligned}
 > g(p) &= \frac{e^{-i p x_0}}{\sqrt{2\pi}} \cdot \frac{2\pi}{r} \sum_{k=-\infty}^{\infty} \delta\left(p - \frac{2k\pi}{r}\right)\\
 > \therefore g(p) &\propto \sum_{k=-\infty}^{\infty} \delta\left(p - \frac{2k\pi}{r}\right)
 > \end{aligned}$$
+> 
 > Therefore, the structure of the position space having period $r$ appears as an integer multiple of the frequency $\omega = \dfrac{2\pi}{r}$ in momentum space, and the period $r$ can be extracted by measuring momentum.
 
 In this paper, the three oscillators play the following roles:
@@ -276,10 +310,13 @@ In this paper, the three oscillators play the following roles:
     > Similar to how the upper register in Shor's algorithm encodes the $x$ value. Although $x$ is a continuous variable, it acts like a bit string, conceptually performing operations like $x \mapsto \lfloor x \rfloor \bmod 2$, $x \mapsto \lfloor x / 2 \rfloor$.
     > 
     > To make this possible, a GKP state (Gottesman-Kitaev-Preskill state) is used to reliably store the continuous variable $x$. The basic lattice unit of GKP is $\sqrt{\pi}$, and the GKP state is expressed as follows:
+    > 
     > $$\psi_{GKP}(x)=\sum_{k\in \mathbb{Z}}\delta(x-k\sqrt{\pi})$$
+    > 
     > Noise (small movement) in $x$ is absorbed by the lattice structure, making it appear as a state fixed to integer lattices upon measurement.
     >
     > However, since infinite momentum variance is impossible in real physical systems, an approximate GKP state is used to maintain a periodic lattice structure.
+    > 
     > $$\psi(x)=\sum_{k\in\mathbb{Z}}e^{-\frac{(x-kr)^2}{2\sigma^2}}$$
 2. Second oscillator: Stores $f_{a,N,m}(x)$ as a work register
     > $f_{a,N,m}(x)$ is a pseudo-modular power function defined to have the same periodic structure as $f(x)=a^x \bmod N$ in Shor's algorithm, playing a role similar to the lower register.
@@ -291,9 +328,11 @@ In this paper, the three oscillators play the following roles:
     > Shift: $y \rightarrow y + R$
     >
     > $$U_{a,N,m} \vert x \rangle \vert y \rangle = \vert x \rangle \vert y + f_{a,N,m}(x) \rangle$$
+    > 
     > Since $f_{a,N,m}(x)$ is a function with a nonlinear periodic structure, it is constructed step-by-step through bit-wise decomposition, much like in Shor's algorithm.
     >
     > By accumulating $c_j$ (constant displacement amount corresponding to $a^{2^j} \bmod N$) as a conditional shift according to each bit $x_j$, $f_{a,N,m}(x)$ can be defined as follows:
+    > 
     > $$f_{a,N,m}(x)\;:=\;\sum_{j=0}^{m-1} x_j \cdot c_j$$
     > 
     > That is, it can be accumulated in the work register only by combining scale changes and shift operations.
@@ -313,32 +352,40 @@ When the qubit is placed in the $\vert + \rangle = \dfrac{\vert 0 \rangle + \ver
 > The unitary operator $U$ is defined as $U \vert y \rangle = \vert ay \bmod N \rangle$. Since applying the $U$ operation $r$ times to $\vert 1 \rangle$ eventually returns it to $\vert 1 \rangle$, $U^r = I$. Therefore, the eigenvalue $\lambda$ of $U$ must satisfy $\lambda^r = 1$, can be written in the form $\lambda = e^{2\pi i \phi}$ ($\phi = \dfrac{s}{r}, s \in \{0, 1, \cdots, r-1\}$), and $U\vert \psi \rangle = e^{2\pi i \phi} \vert \psi \rangle$.
 > 
 > Applying the control gate $CU$ applies $U$ to the target state when the control qubit is $\vert 1 \rangle$.
+> 
 > $$\begin{aligned}
 > CU \vert + \rangle \vert \psi \rangle &= \frac{1}{\sqrt{2}} \left( \vert 0 \rangle \vert \psi \rangle + \vert 1 \rangle U \vert \psi \rangle \right)\\
 > &= \frac{1}{\sqrt{2}} \left( \vert 0 \rangle \vert \psi \rangle + \vert 1 \rangle e^{2\pi i \phi} \vert \psi \rangle \right)\\
 > &= \left( \frac{\vert 0 \rangle + e^{2\pi i \phi} \vert 1 \rangle}{\sqrt{2}}\right) \otimes \vert \psi \rangle
 > \end{aligned}$$
+> 
 > Thus, the period $\phi$ is included in the phase of the control qubit (Phase Kickback).
 
 If the result of measuring the $m$-th bit ($\phi_m$) is $1$, the phase causes interference when measuring the next bit ($\phi_{m-1}$), requiring correction.
 > Expressing the phase as $\phi = \dfrac{\phi_1}{2^1} + \dfrac{\phi_2}{2^2} + \cdots + \dfrac{\phi_m}{2^m} \quad (\phi_j \in \{0, 1\})$, the phase kicked back when performing the $U^{2^{k-1}}$ operation in the $k$-th step is as follows:
+> 
 > $$\begin{aligned}
 > 2^{k-1}\phi &= 2^{k-1} (0.\phi_1\phi_2\cdots\phi_k\cdots\phi_m) \\
 > &= \underbrace{\phi_1\phi_2\cdots\phi_{k-1}}_{\text{integer part}} . \underbrace{\phi_k\phi_{k+1}\cdots\phi_m}_{\text{fractional part}}
 > \end{aligned}$$
+> 
 > Since the phase in a quantum state cycles with a period of $2\pi$, the integer part becomes $e^{2\pi i \cdot \text{integer part}} = 1$, so only the fractional part needs to be considered. Therefore, the phase remaining in the $k$-th step is $2\pi(0.\phi_k\phi_{k+1}\cdots\phi_m)$.
 > When measuring the current bit $\phi_k$, the already measured lower bits ($\phi_{k+1}$, $\phi_{k+2}$, $\cdots$, $\phi_m$) cause interference.
 
 At this time, the phase is corrected using an $R_z(-\theta)$ gate.
 > Interference must be removed using the already known lower bits $\phi_{k+1}$, $\phi_{k+2}$, $\cdots$, $\phi_m$, and the applied rotation angle $\theta_k$ is as follows:
+> 
 > $$\begin{aligned}\theta_k &= 2\pi \left(0.0\phi_{k+1}\phi_{k+2}\cdots\phi_m\right)\\
 > &= 2\pi \sum_{j=k+1}^{m} \frac{\phi_j}{2^{j-k+1}}
 > \end{aligned}$$
+> 
 > That is, applying $R_z(-\theta_k)$ rotates the phase of the $\vert 1 \rangle$ state by $- \theta_k$, removing the interference.
+> 
 > $$\begin{aligned}
 > &2\pi (0.\phi_k\phi_{k+1}\dots\phi_m) - 2\pi (0.0\phi_{k+1}\dots\phi_m) \\
 > =&\ 2\pi (0.\phi_k) = 2\pi \cdot \frac{\phi_k}{2} = \pi \phi_k
 > \end{aligned}$$
+> 
 > The phase of the corrected qubit becomes $\pi \phi_k$, and measuring it after applying the Hadamard gate yields the $\phi_k$ value.
 > 
 > If $\phi_k = 0$, the phase becomes $0$ and the qubit is $\vert + \rangle$
