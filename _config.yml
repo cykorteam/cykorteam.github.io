@@ -15,6 +15,7 @@ disqus_shortname: YourDisqusShortname
 include: [_pages]
 markdown: kramdown
 kramdown:
+  input: kramdown
   math_engine: katex
 permalink: /:year/:month/:title
 sass:
