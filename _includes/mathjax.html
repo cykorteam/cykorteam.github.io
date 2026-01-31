@@ -32,15 +32,16 @@
                       i += 2;
                       continue;
                   }
-                  if (inMath) {
-                      if (html.startsWith("<em>", i)) {
-                          out += "_";
-                          i += 4;
-                          continue;
-                      }
-                      if (html.startsWith("</em>", i)) {
-                          out += "_";
-                          i += 5;
+                  if (inMath && html.startsWith("<em>", i)) {
+                      var endEm = html.indexOf("</em>", i + 4);
+                      if (endEm !== -1) {
+                          var inner = html.slice(i + 4, endEm);
+                          if (inner[0] === "{") {
+                              out += "_" + inner;
+                          } else {
+                              out += "_{" + inner + "}";
+                          }
+                          i = endEm + 5;
                           continue;
                       }
                   }
