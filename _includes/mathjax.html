@@ -4,64 +4,61 @@
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" crossorigin="anonymous"></script>
   <script>
       document.addEventListener("DOMContentLoaded", function() {
-          function restoreUnderscoreInDollarMath(html) {
-              var out = "";
-              var i = 0;
-              var inMath = false;
-              while (i < html.length) {
-                  var ch = html[i];
-                  if (ch === "\\" && html[i + 1] === "$") {
-                      out += "\\$";
-                      i += 2;
-                      continue;
-                  }
-                  if (ch === "$") {
-                      if (html[i + 1] === "$") {
-                          inMath = !inMath;
-                          out += "$$";
-                          i += 2;
-                          continue;
-                      }
-                      inMath = !inMath;
-                      out += "$";
-                      i += 1;
-                      continue;
-                  }
-                  if (inMath && ch === "\\" && html[i + 1] === "_") {
-                      out += "_";
-                      i += 2;
-                      continue;
-                  }
-                  if (inMath && html.startsWith("<em>", i)) {
-                      var endEm = html.indexOf("</em>", i + 4);
-                      if (endEm !== -1) {
-                          var inner = html.slice(i + 4, endEm);
-                          if (inner[0] === "{") {
-                              out += "_" + inner;
-                          } else {
-                              out += "_{" + inner + "}";
-                          }
-                          i = endEm + 5;
-                          continue;
-                      }
-                  }
-                  out += ch;
-                  i += 1;
-              }
-              return out;
-          }
-
           var mathRoot = document.querySelector(".c-article__main") || document.body;
           var targets = mathRoot.querySelectorAll("p, li, blockquote, td, th");
           for (var t = 0; t < targets.length; t++) {
               var el = targets[t];
-              if (!el || !el.innerHTML || el.innerHTML.indexOf("$") === -1) {
+              if (!el || !el.textContent || el.textContent.indexOf("$") === -1) {
                   continue;
               }
               if (el.closest("pre, code, kbd, samp")) {
                   continue;
               }
-              el.innerHTML = restoreUnderscoreInDollarMath(el.innerHTML);
+              var inMath = false;
+              var walker = document.createTreeWalker(
+                  el,
+                  NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT,
+                  {
+                      acceptNode: function(node) {
+                          if (node.nodeType === Node.ELEMENT_NODE) {
+                              var tag = node.tagName;
+                              if (tag === "PRE" || tag === "CODE" || tag === "KBD" || tag === "SAMP") {
+                                  return NodeFilter.FILTER_REJECT;
+                              }
+                          }
+                          return NodeFilter.FILTER_ACCEPT;
+                      }
+                  }
+              );
+              var nodes = [];
+              while (walker.nextNode()) {
+                  nodes.push(walker.currentNode);
+              }
+              for (var i = 0; i < nodes.length; i++) {
+                  var node = nodes[i];
+                  if (node.nodeType === Node.TEXT_NODE) {
+                      var txt = node.nodeValue || "";
+                      for (var j = 0; j < txt.length; j++) {
+                          var ch = txt[j];
+                          if (ch === "\\" && txt[j + 1] === "$") {
+                              j += 1;
+                              continue;
+                          }
+                          if (ch === "$") {
+                              if (txt[j + 1] === "$") {
+                                  inMath = !inMath;
+                                  j += 1;
+                                  continue;
+                              }
+                              inMath = !inMath;
+                          }
+                      }
+                  } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "EM" && inMath) {
+                      var innerText = node.textContent || "";
+                      var sub = innerText[0] === "{" ? "_" + innerText : "_{" + innerText + "}";
+                      node.replaceWith(document.createTextNode(sub));
+                  }
+              }
           }
 
           renderMathInElement(mathRoot, {
