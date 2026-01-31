@@ -64,7 +64,7 @@ $$\psi'=F_Q\psi$$
 
 Also, by the above definition, $F_Q^\dagger \cdot F_Q = I$ and $F_Q^\dagger = F_Q^{-1}$.
 >
-> Since $(F_Q)_{k, x} = \dfrac{1}{\sqrt{Q}}e^{2\pi ikx/Q}$ , it follows that $(F_Q)_{k, x}^\dagger = \overline{(F_Q)_{k, x}} = \dfrac{1}{\sqrt{Q}}e^{-2\pi ikx/Q}$.
+> Since ${(F_Q)}_{k, x} = \dfrac{1}{\sqrt{Q}}e^{2\pi ikx/Q}$ , it follows that ${(F_Q)}_{k, x}^\dagger = \overline{{(F_Q)}_{k, x}} = \dfrac{1}{\sqrt{Q}}e^{-2\pi ikx/Q}$.
 >
 > $$
 > \begin{aligned}
