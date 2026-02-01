@@ -5,6 +5,7 @@
   <script>
       document.addEventListener("DOMContentLoaded", function() {
           var mathRoot = document.querySelector(".c-article__main") || document.body;
+          var katexRendered = false;
 
           function updateMathState(text, inMath) {
               if (!text) {
@@ -103,17 +104,43 @@
               }
           }
 
-          markEmphasisOverMath(mathRoot);
+          function runKatex() {
+              if (katexRendered) {
+                  return true;
+              }
+              markEmphasisOverMath(mathRoot);
+              mathRoot.normalize();
+              if (typeof renderMathInElement !== "function") {
+                  return false;
+              }
+              renderMathInElement(mathRoot, {
+                  delimiters: [
+                      { left: "$$", right: "$$", display: true },
+                      { left: "\\[", right: "\\]", display: true },
+                      { left: "\\(", right: "\\)", display: false },
+                      { left: "$", right: "$", display: false }
+                  ],
+                  throwOnError: false
+              });
+              katexRendered = true;
+              return true;
+          }
 
-          renderMathInElement(mathRoot, {
-              delimiters: [
-                  { left: "$$", right: "$$", display: true },
-                  { left: "\\[", right: "\\]", display: true },
-                  { left: "\\(", right: "\\)", display: false },
-                  { left: "$", right: "$", display: false }
-              ],
-              throwOnError: false
-          });
+          function scheduleKatex() {
+              if (runKatex()) {
+                  return;
+              }
+              var attempts = 0;
+              var timer = setInterval(function() {
+                  attempts += 1;
+                  if (runKatex() || attempts >= 20) {
+                      clearInterval(timer);
+                  }
+              }, 100);
+          }
+
+          scheduleKatex();
+          window.addEventListener("load", scheduleKatex);
       });
   </script>
   <style>
