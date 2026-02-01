@@ -7,7 +7,7 @@ katex: True
 ---
 **Written by [Minjae Lee](https://mang0.kr)**
 <br>
-If you would like to see the review written in Korean, please visit [mang0.kr](https://mang0.kr/review.html?review=260125&lang=ko)
+If you would like to see the review written in Korean, please visit [mang0.kr](https://mang0.kr/pages/review.html?review=260125&lang=ko)
 
 # Factoring an integer with three oscillators and a qubit
 
