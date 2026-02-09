@@ -15,7 +15,8 @@ disqus_shortname: YourDisqusShortname
 include: [_pages]
 markdown: kramdown
 kramdown:
-  input: kramdown
+  # Enable GitHub-Flavored Markdown so fenced code blocks (```) render correctly.
+  input: GFM
   math_engine: katex
   emphasis: "*"
   strong: "**"
