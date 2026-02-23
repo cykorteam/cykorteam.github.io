@@ -85,23 +85,23 @@ Ultimately, this flaw was assigned CVE-2026-21721 (CVSS 8.1). Questioning *"Why 
 
 Bug Bounty & CVEs
 
-- CVE-2025-66514 | CVSS 5.4 / XSS in nextcloud mail | (Bounty Awarded)
-- CVE-2025-66558 | CVSS 3.1 / Improper Authentication in nextcloud twofactor_webauthn | (Bounty Awarded)
-- CVE-2026-0994 | CVSS 8.2 / DoS in protobuf
-- CVE-2026-21721 | CVSS 8.1 / Privilege Escalation in grafana | (Bounty Awarded)
-- CVE-2026-22922 | CVSS 6.5 / Incorrect Use of Privileged APIs in airflow | (Bounty Awarded)
+- CVE-2025-66514 , CVSS 5.4 / XSS in nextcloud mail , (Bounty Awarded)
+- CVE-2025-66558 , CVSS 3.1 / Improper Authentication in nextcloud twofactor_webauthn , (Bounty Awarded)
+- CVE-2026-0994 , CVSS 8.2 / DoS in protobuf
+- CVE-2026-21721 , CVSS 8.1 / Privilege Escalation in grafana , (Bounty Awarded)
+- CVE-2026-22922 , CVSS 6.5 / Incorrect Use of Privileged APIs in airflow , (Bounty Awarded)
 - *pending CVEs…*
 
 Bug Bounty (No CVE issued)
 
-- Nextcloud Contacts (pre-release) | CVSS 6.5 / IDOR in nextcloud contacts | (Bounty Awarded)
-- Matomo | Security issue reported via HackerOne | (Bounty Awarded)
-- Matomo Official plugins | Security issue reported via HackerOne | (Bounty Awarded)
-- Matomo Official plugins | Security issue reported via HackerOne | (Bounty Awarded)
-- Matomo Official plugins | Security issue reported via HackerOne | (Bounty Awarded)
-- Grafana | Security issue reported via Intigriti | (Bounty Awarded, pending CVE)
-- Owncloud | Security issue reported via YesWeHack | (Bounty Awarded, pending CVE)
-- Discourse | Security issue reported via HackerOne | (8 Bounties Awarded, pending CVEs)
+- Nextcloud Contacts (pre-release) , CVSS 6.5 / IDOR in nextcloud contacts , (Bounty Awarded)
+- Matomo , Security issue reported via HackerOne , (Bounty Awarded)
+- Matomo Official plugins , Security issue reported via HackerOne , (Bounty Awarded)
+- Matomo Official plugins , Security issue reported via HackerOne , (Bounty Awarded)
+- Matomo Official plugins , Security issue reported via HackerOne , (Bounty Awarded)
+- Grafana , Security issue reported via Intigriti , (Bounty Awarded, pending CVE)
+- Owncloud , Security issue reported via YesWeHack , (Bounty Awarded, pending CVE)
+- Discourse , Security issue reported via HackerOne , (8 Bounties Awarded, pending CVEs)
 
 Newly discovered 0-days will be updated in the `About Me` section of my [blog](https://se1en.tistory.com/4).
 
