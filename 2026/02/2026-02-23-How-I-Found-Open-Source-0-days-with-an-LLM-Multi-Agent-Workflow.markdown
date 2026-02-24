@@ -28,11 +28,11 @@ Ultimately, I targeted web open-source projects with massive codebases that I am
 ## Architecture
 
 I experimented with various workflows, but the two I currently use as my main drivers share a common structure: the 'Vulnerability Discovery' and 'False Positive Verification' stages are strictly separated. The core idea is not to use an expensive model for the entire process, but to efficiently route the data to the appropriate models at each stage.
-![AIxCC.jpg](./AIxCC.jpg)
+![AIxCC.jpg](./assets/AIxCC.jpg)
 I adopted this architecture inspired by Theori's 'RoboDuck' case from AIxCC. While RoboDuck used fuzzing (which consumes more tokens), seeing that it could cost over $1,000 per hour made me realize that to ensure sustainability, I couldn't just use the absolute best model for everything. I needed to mix and match models based on necessity.
 
 While comparing benchmarks of various low-cost LLMs, I came across an article on GeekNews about the GLM model, which seemed to offer a great balance of performance and price. Among GLM models, the recently released GLM-5 performs about 20% better than GLM-4.7, but consumes three times as many tokens. Since web vulnerabilities often require detecting logic bugs like IDOR rather than highly complex reasoning, I decided that increasing the invocation frequency of a cheaper model would be more effective than using a slightly better one. Thus, I used the affordable GLM-4.7 as my primary workhorse.
-![AIbench.png](./AIbench.png)
+![AIbench.png](./assets/AIbench.png)
 *Coding Index benchmarks for each model*
 - **Finding (GLM-4.7):** Searches for vulnerability candidates. I created several workflow variations by tweaking the prompt in this finding stage.
 - **Semi-Triage (GLM-5):** Filters out obvious false positives from the candidates generated in Step 1 using GLM-5, which performs better than GLM-4.7.
@@ -65,7 +65,7 @@ A personal takeaway from this project is that AI is surprisingly good at finding
 If a human were to perform this analysis manually, they would have to cross-reference tens of thousands of lines of API routing code with the complex interactions of the permission engine. Not only is it physically time-consuming, but as a human scans through thousands of parameters, their concentration wanes, making it easy to miss the crucial missing check. AI, however, does not get tired and systematically cross-references every API definition against the security model, showing overwhelming performance in catching subtle logical gaps that humans easily overlook.
 
 The most representative case is the Privilege Escalation vulnerability (CVE-2026-21721) I found in Grafana's dashboard permission management API using this LLM workflow.
-![grafana_cve.png](./grafana_cve.png)
+![grafana_cve.png](./assets/grafana_cve.png)
 
 ### Description
 
