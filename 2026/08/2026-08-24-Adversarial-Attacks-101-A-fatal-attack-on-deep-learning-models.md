@@ -680,7 +680,7 @@ Let the user prompt be $x$, an adversarial suffix of length $m$ be $s=(s_1,\dots
 
 $$\mathcal L(s) = -\sum_{j=1}^{H}\log p_\theta\left(y_j^\star \mid x\oplus s,\; y_{<j}^\star\right).$$
 
-Compared with an image attack, $\mathcal L$ itself is differentiable, but the problem is that $s_i$ is a discrete variable that must select one token from the vocabulary. Letting the vocabulary size be $|V|$ and representing the current token $s_i$ as the one-hot vector $e_{s_i}\in\{0,1\}^{|V|}$, the gradient at each suffix position
+Compared with an image attack, $\mathcal L$ itself is differentiable, but the problem is that $s_i$ is a discrete variable that must select one token from the vocabulary. Letting the vocabulary size be $\vert V \vert$ and representing the current token $s_i$ as the one-hot vector $e_{s_i}\in\{0,1\}^{\vert V \vert}$, the gradient at each suffix position
 
 $$g_i=\nabla_{e_{s_i}}\mathcal L(s)$$
 
