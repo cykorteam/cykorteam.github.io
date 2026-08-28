@@ -78,6 +78,10 @@
     ol {
         margin-left: 2.1rem;
     }
+
+    #references ~ p {
+        overflow-wrap: anywhere;
+    }
     
 }
 

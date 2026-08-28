@@ -70,7 +70,7 @@
                   var el = node.parentElement;
                   while (el) {
                       var tag = el.tagName;
-                      if (tag === "EM" || tag === "I" || tag === "STRONG" || tag === "B") {
+                      if (tag === "EM" || tag === "I") {
                           marked.add(el);
                       }
                       el = el.parentElement;
@@ -99,8 +99,7 @@
                   if (!el.parentElement) {
                       continue;
                   }
-                  var marker = (el.tagName === "STRONG" || el.tagName === "B") ? "__" : "_";
-                  el.replaceWith(document.createTextNode(marker + el.textContent + marker));
+                  el.replaceWith(document.createTextNode("_" + el.textContent + "_"));
               }
           }
 

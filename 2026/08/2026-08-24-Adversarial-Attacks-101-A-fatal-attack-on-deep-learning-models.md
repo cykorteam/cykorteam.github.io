@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Adversarial Attacks 101: A fatal attack on deep learning models"
-tags: [AI for Hacking, Hacking, Adversarial ML, Deeplearning, CyKor]
+tags: [AI for Hacking, Hacking, AI Security, AI Hacking, Adversarial Attacks, Adversarial ML, Deeplearning, Robustness of AI, CyKor]
 date:   2026-08-24
 katex: True
 ---
@@ -100,7 +100,7 @@ The same idea can be explained from the perspective of decision boundaries. Trai
 
 In image classification, permissible input modifications are commonly defined using an $L_p$ norm. $L_\infty$ limits the maximum amount by which each pixel channel can change, while $L_2$ limits the Euclidean norm of the overall perturbation. Here, the norm is not itself a measure of semantic similarity as perceived by humans. $L_p$ constraints are widely used because **they make it possible to define the attacker's capabilities as an explicit and reproducible mathematical set**.
 
-Let us formulate this more rigorously. Given a training dataset $D=\{(x_i,y_i)\}_{i=1}^{n}$ and a training algorithm $A$, the trained parameters are $\theta=A(D)$. If the logits of a $K$-class classifier are $z_\theta(x)\in\mathbb R^K$, the predicted class can be written as $\hat y(x)=\arg\max_k z_{\theta,k}(x)$.
+Let us formulate this more rigorously. Given a training dataset $D=\\{(x_i,y_i)\\}_{i=1}^{n}$ and a training algorithm $A$, the trained parameters are $\theta=A(D)$. If the logits of a $K$-class classifier are $z_\theta(x)\in\mathbb R^K$, the predicted class can be written as $\hat y(x)=\arg\max_k z_{\theta,k}(x)$.
 
 Standard supervised learning seeks to reduce the average loss over the data distribution $\mathcal D$, namely the expected risk.
 
@@ -108,7 +108,7 @@ $$R(\theta) = \mathbb E_{(x,y)\sim\mathcal D}\left[L(f_\theta(x),y)\right].$$
 
 An important assumption is hidden here: test inputs arise naturally from a distribution similar to the one used for training. In an adversarial setting, the attacker can choose these inputs, so the admissible set within which the attacker may move around the original $x$ must be defined separately.
 
-For example, under an $L_p$ threat model, we can define the admissible perturbation set as $S=S_p(x,\epsilon)=\{\delta\in\mathbb R^d:\|\delta\|_p\le\epsilon,\;x+\delta\in\mathcal X\}$. If the image lies in $[0,1]^d$, the condition $x+\delta\in\mathcal X$ enforces the valid pixel domain. Thus, $\epsilon$ is not merely a hyperparameter but part of the input-manipulation capability granted to the attacker.
+For example, under an $L_p$ threat model, we can define the admissible perturbation set as $S=S_p(x,\epsilon)=\\{\delta\in\mathbb R^d:\lVert\delta\rVert_p\le\epsilon,\;x+\delta\in\mathcal X\\}$. If the image lies in $[0,1]^d$, the condition $x+\delta\in\mathcal X$ enforces the valid pixel domain. Thus, $\epsilon$ is not merely a hyperparameter but part of the input-manipulation capability granted to the attacker.
 
 An untargeted evasion attack searches within this set for the modification that maximizes the loss for the correct label $y$.
 
@@ -156,7 +156,7 @@ Goodfellow et al.'s FGSM (Fast Gradient Sign Method) reframed this problem throu
 
 $$L(x+\delta,y) \approx L(x,y) + \nabla_x L(x,y)^\top\delta$$
 
-under a first-order approximation, the remaining problem under the $L_\infty$ constraint is $\max_{\|\delta\|_\infty\le\epsilon}\nabla_xL(x,y)^\top\delta$. Because each coordinate moves independently within $[-\epsilon,\epsilon]$, the solution is determined by the sign of the gradient.
+under a first-order approximation, the remaining problem under the $L_\infty$ constraint is $\max_{\lVert\delta\rVert_\infty\le\epsilon}\nabla_xL(x,y)^\top\delta$. Because each coordinate moves independently within $[-\epsilon,\epsilon]$, the solution is determined by the sign of the gradient.
 
 $$\delta_{\mathrm{FGSM}} = \epsilon\, \operatorname{sign} \left( \nabla_x L(f_\theta(x),y) \right).$$
 
@@ -288,7 +288,7 @@ C&W was published before PGD, but the problem it addresses differs from the prog
 
 A representative targeted $L_2$ C&W objective is
 
-$$\min_\delta \|\delta\|_2^2 + c\cdot g(x+\delta)$$
+$$\min_\delta \lVert\delta\rVert_2^2 + c\cdot g(x+\delta)$$
 
 and, letting the target class be $t$ and the logits be $Z_i(x)$, we define
 
@@ -429,7 +429,7 @@ Goodfellow et al. showed that mixing adversarial examples created with FGSM into
 
 Madry et al. framed this problem more clearly as robust optimization.[7]
 
-$$\min_\theta \mathbb E_{(x,y)\sim\mathcal D} \left[ \max_{\|\delta\|_\infty\le\epsilon} L(f_\theta(x+\delta),y) \right].$$
+$$\min_\theta \mathbb E_{(x,y)\sim\mathcal D} \left[ \max_{\lVert\delta\rVert_\infty\le\epsilon} L(f_\theta(x+\delta),y) \right].$$
 
 The difference from FGSM adversarial training is that the inner maximization does not end with a single local linearization; instead, **it is approximated sufficiently strongly with PGD before a parameter update is performed on the resulting adversarial example**. In Madry et al.'s CIFAR-10 experiments, the wide model trained with FGSM collapsed to 0% accuracy under 20-step PGD, while the wide model using PGD adversarial training retained 45.8% under the same attack.[7] This comparison clearly shows that strong inner maximization goes beyond serving as an attack-evaluation tool and changes the learned decision boundary itself.
 
@@ -469,7 +469,7 @@ Although the code appears simple, its actual cost is high. Standard training req
 
 TRADES considers a slightly different problem. At ICML 2019, Zhang et al. explicitly addressed the trade-off between standard accuracy and robustness, separating clean classification loss from local prediction consistency.[11]
 
-$$\min_\theta \mathbb E \left[ L_{\mathrm{CE}}(f_\theta(x),y) + \beta \max_{x'\in B_\epsilon(x)} D_{\mathrm{KL}} \left( f_\theta(x)\,\|\,f_\theta(x') \right) \right].$$
+$$\min_\theta \mathbb E \left[ L_{\mathrm{CE}}(f_\theta(x),y) + \beta \max_{x'\in B_\epsilon(x)} D_{\mathrm{KL}} \left( f_\theta(x)\,\Vert\,f_\theta(x') \right) \right].$$
 
 Whereas Madry-style PGD-AT directly minimizes the label loss of an adversarial input, TRADES **separates the term that preserves clean accuracy from the term that promotes local smoothness of the decision boundary**.
 
@@ -508,7 +508,7 @@ At CCS 2017, MagNet used both a detector that identifies adversarial inputs with
 
 Assuming that a generator $G$ models the clean data distribution well, Defense-GAN finds a latent code $z$ for a test input $x$ using the following reconstruction loss.
 
-$$z^\star = \arg\min_z \|G(z)-x\|_2^2.$$
+$$z^\star = \arg\min_z \lVert G(z)-x\rVert_2^2.$$
 
 It then uses
 
@@ -548,7 +548,7 @@ def purify_with_generator(
 
 An autoencoder-based detector can also use the reconstruction error itself as a score.
 
-$$s_{\mathrm{rec}}(x) = \|x-\mathrm{AE}(x)\|_2.$$
+$$s_{\mathrm{rec}}(x) = \lVert x-\mathrm{AE}(x)\rVert_2.$$
 
 ```python
 def reconstruction_detector(autoencoder, x, threshold):
@@ -574,7 +574,7 @@ $$S_\Delta = \mathbb E_{x\sim\mathcal D} \left[ h(x\oplus\Delta) \right].$$
 
 At inference time, the cosine similarity between the activation of input $x$ and the trapdoor signature is computed.
 
-$$s_\Delta(x) = \frac{ h(x)^\top S_\Delta }{ \|h(x)\|_2\, \|S_\Delta\|_2 }.$$
+$$s_\Delta(x) = \frac{ h(x)^\top S_\Delta }{ \lVert h(x)\rVert_2\, \lVert S_\Delta\rVert_2 }.$$
 
 If this value exceeds the threshold $\tau$, the input is considered excessively close to the trapdoor direction.
 
@@ -680,7 +680,7 @@ Let the user prompt be $x$, an adversarial suffix of length $m$ be $s=(s_1,\dots
 
 $$\mathcal L(s) = -\sum_{j=1}^{H}\log p_\theta\left(y_j^\star \mid x\oplus s,\; y_{<j}^\star\right).$$
 
-Compared with an image attack, $\mathcal L$ itself is differentiable, but the problem is that $s_i$ is a discrete variable that must select one token from the vocabulary. Letting the vocabulary size be $\vert V \vert$ and representing the current token $s_i$ as the one-hot vector $e_{s_i}\in\{0,1\}^{\vert V \vert}$, the gradient at each suffix position
+Compared with an image attack, $\mathcal L$ itself is differentiable, but the problem is that $s_i$ is a discrete variable that must select one token from the vocabulary. Letting the vocabulary size be $\vert V \vert$ and representing the current token $s_i$ as the one-hot vector $e_{s_i}\in\\{0,1\\}^{\vert V \vert}$, the gradient at each suffix position
 
 $$g_i=\nabla_{e_{s_i}}\mathcal L(s)$$
 

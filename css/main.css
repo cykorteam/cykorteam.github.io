@@ -251,6 +251,10 @@ pre {
     margin-left: 2.1rem
 }
 
+.c-article__main #references~p {
+    overflow-wrap: anywhere
+}
+
 .c-tag {
     margin-right: 1rem;
     position: relative;
